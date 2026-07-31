@@ -1,0 +1,23 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "dev:local": ".\\.local-node\\node-v18.20.0-win-x64\\node.exe node_modules/next/dist/bin/next dev -p 3002",
+    "build:local": ".\\.local-node\\node-v18.20.0-win-x64\\node.exe node_modules/next/dist/bin/next build"
+  },
+  "dependencies": {
+    "next": "13.4.7",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "swr": "2.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.130",
+    "@types/react": "^19.2.17",
+    "typescript": "^4.9.5"
+  }
+}

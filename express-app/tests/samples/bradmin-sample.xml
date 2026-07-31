@@ -1,0 +1,9 @@
+<!-- Optional sample for parser tests. Provide a real BRAdmin XML here to enable tests. -->
+<Devices>
+  <Device>
+    <Model>TestPrinter</Model>
+    <Serial>ABC123</Serial>
+    <IpAddress>192.168.1.100</IpAddress>
+    <PageCount>1234</PageCount>
+  </Device>
+</Devices>

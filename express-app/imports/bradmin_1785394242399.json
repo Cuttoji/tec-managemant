@@ -1,0 +1,37 @@
+{
+  "file": "bradmin_1785394242397.xml",
+  "parsed": {
+    "mappingImplemented": false,
+    "message": "Best-effort extraction complete. Provide a BRAdmin sample XML to implement authoritative mapping.",
+    "devices": [
+      {
+        "serial": "ABC123",
+        "pages": 12345,
+        "raw": {
+          "serial": "ABC123",
+          "pages": 12345
+        }
+      },
+      {
+        "serial": null,
+        "pages": 999,
+        "raw": {
+          "pages": 999
+        }
+      }
+    ],
+    "parsed": {
+      "root": {
+        "device": [
+          {
+            "serial": "ABC123",
+            "pages": 12345
+          },
+          {
+            "pages": 999
+          }
+        ]
+      }
+    }
+  }
+}

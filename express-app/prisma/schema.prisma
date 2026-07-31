@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Use string fields for role and type to maximize connector compatibility in local dev.
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("DISPATCHER")
+  primarySkill String?
+  importLogs    ImportLog[]
+  approvedAssets Asset[] @relation("ApprovedBy")
+  rejectedAssets Asset[] @relation("RejectedBy")
+  createdAt    DateTime @default(now())
+}
+
+
+model Location {
+  id        Int     @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  assets    Asset[]
+}
+
+model Asset {
+  id           Int       @id @default(autoincrement())
+  assetTag     String?   @unique
+  serialNumber String?   @unique
+  type         String
+  location     Location? @relation(fields: [locationId], references: [id])
+  locationId   Int?
+  approvedBy    Int?
+  approvedByUser User?   @relation("ApprovedBy", fields: [approvedBy], references: [id])
+  approvedAt    DateTime?
+  rejectedBy    Int?
+  rejectedByUser User?   @relation("RejectedBy", fields: [rejectedBy], references: [id])
+  rejectedAt    DateTime?
+  purchaseDate DateTime?
+  cpu          String?
+  ramGb        Int?
+  storageType  String?
+  storageGb    Int?
+  isActive     Boolean   @default(true)
+  retiredAt    DateTime?
+  needsReview  Boolean   @default(false)
+  pageCounters PageCounterLog[]
+  maintenanceLogs MaintenanceLog[]
+  createdAt    DateTime  @default(now())
+}
+
+// Add indexes for performance on common lookups (define inline with models using @@index)
+
+model MaintenanceLog {
+  id        Int      @id @default(autoincrement())
+  asset     Asset    @relation(fields: [assetId], references: [id])
+  assetId   Int
+  notes     String?
+  createdBy Int?
+  createdAt DateTime @default(now())
+  components ComponentLog[]
+}
+
+model ComponentLog {
+  id             Int      @id @default(autoincrement())
+  maintenance    MaintenanceLog @relation(fields: [maintenanceId], references: [id])
+  maintenanceId  Int
+  part           String
+  quantity       Int
+}
+
+model PageCounterLog {
+  id        Int      @id @default(autoincrement())
+  asset     Asset    @relation(fields: [assetId], references: [id])
+  assetId   Int
+  total     Int?
+  recordedAt DateTime @default(now())
+}
+
+model ImportLog {
+  id           Int      @id @default(autoincrement())
+  filename     String
+  rawData      String
+  parsed       String
+  unmatchedCount Int
+  createdBy    Int?
+  createdByUser User?   @relation(fields: [createdBy], references: [id])
+  createdAt    DateTime @default(now())
+}
