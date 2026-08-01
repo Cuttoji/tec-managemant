@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import AssetList from '../src/components/AssetList';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const fetcher = (url: string) => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   return fetch(`${API_BASE}${url}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} }).then(res => res.json());

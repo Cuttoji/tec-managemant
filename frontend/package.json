@@ -9,6 +9,9 @@
     "dev:local": ".\\.local-node\\node-v18.20.0-win-x64\\node.exe node_modules/next/dist/bin/next dev -p 3002",
     "build:local": ".\\.local-node\\node-v18.20.0-win-x64\\node.exe node_modules/next/dist/bin/next build"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "next": "13.4.7",
     "react": "18.2.0",

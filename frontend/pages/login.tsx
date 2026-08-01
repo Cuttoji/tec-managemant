@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/router';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export default function Login() {
   const [email, setEmail] = useState('');

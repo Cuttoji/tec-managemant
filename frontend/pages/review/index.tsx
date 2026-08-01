@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import Link from 'next/link';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const fetcher = (url: string) => fetch(`${API_BASE}${url}`).then(res => res.json());
 
 export default function ReviewList() {
