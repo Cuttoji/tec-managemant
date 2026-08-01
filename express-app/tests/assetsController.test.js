@@ -1,9 +1,11 @@
 const request = require('supertest');
-const app = require('../src/index');
-const prisma = require('../src/db');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'test-secret';
+process.env.JWT_SECRET = JWT_SECRET;
+
+const app = require('../src/index');
+const prisma = require('../src/db');
 
 function makeToken(user) {
   return jwt.sign({ sub: user.id, role: user.role, email: user.email }, JWT_SECRET);
