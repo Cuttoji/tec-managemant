@@ -16,6 +16,9 @@ model User {
   role         String   @default("DISPATCHER")
   primarySkill String?
   importLogs    ImportLog[]
+  dispatchedLogs MaintenanceLog[] @relation("Dispatcher")
+  technicianLogs MaintenanceLog[] @relation("Technician")
+  reviewedLogs   MaintenanceLog[] @relation("Reviewer")
   approvedAssets Asset[] @relation("ApprovedBy")
   rejectedAssets Asset[] @relation("RejectedBy")
   createdAt    DateTime @default(now())
@@ -59,13 +62,29 @@ model Asset {
 // Add indexes for performance on common lookups (define inline with models using @@index)
 
 model MaintenanceLog {
-  id        Int      @id @default(autoincrement())
-  asset     Asset    @relation(fields: [assetId], references: [id])
-  assetId   Int
-  notes     String?
-  createdBy Int?
-  createdAt DateTime @default(now())
-  components ComponentLog[]
+  id           Int      @id @default(autoincrement())
+  asset        Asset    @relation(fields: [assetId], references: [id])
+  assetId      Int
+  dispatcherId  Int
+  dispatcher    User     @relation("Dispatcher", fields: [dispatcherId], references: [id])
+  technicianId  Int?
+  technician    User?    @relation("Technician", fields: [technicianId], references: [id])
+  issueDetails  String
+  repairDetails String?
+  status        String   @default("OPEN")
+  claimedAt     DateTime?
+  completedAt   DateTime?
+  reviewedBy    Int?
+  reviewer      User?    @relation("Reviewer", fields: [reviewedBy], references: [id])
+  reviewedAt    DateTime?
+  reviewNotes   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  components    ComponentLog[]
+
+  @@index([assetId, status])
+  @@index([technicianId, status])
+  @@index([status])
 }
 
 model ComponentLog {

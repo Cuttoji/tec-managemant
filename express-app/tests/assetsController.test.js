@@ -16,19 +16,25 @@ describe('Assets approve/reject', () => {
   let dispatcherUser;
   let asset;
   let modelAsset;
+  const createdAssetIds = [];
+  const createdUserIds = [];
 
   beforeAll(async () => {
     // create users and an asset in test db
     adminUser = await prisma.user.create({ data: { name: 'Admin', email: 'admin@example.com', passwordHash: 'x', role: 'ADMIN' } });
     dispatcherUser = await prisma.user.create({ data: { name: 'Disp', email: 'disp@example.com', passwordHash: 'x', role: 'DISPATCHER' } });
+    createdUserIds.push(adminUser.id, dispatcherUser.id);
     asset = await prisma.asset.create({ data: { type: 'Printer', assetTag: 'T-100', needsReview: true } });
     modelAsset = await prisma.asset.create({ data: { type: 'Computer', assetTag: 'T-200', model: 'OptiPlex 7090', needsReview: true } });
+    createdAssetIds.push(asset.id, modelAsset.id);
   });
 
   afterAll(async () => {
-    await prisma.pageCounterLog.deleteMany();
-    await prisma.asset.deleteMany();
-    await prisma.user.deleteMany();
+    await prisma.componentLog.deleteMany({ where: { maintenanceId: { in: [] } } });
+    await prisma.maintenanceLog.deleteMany({ where: { assetId: { in: createdAssetIds } } });
+    await prisma.pageCounterLog.deleteMany({ where: { assetId: { in: createdAssetIds } } });
+    await prisma.asset.deleteMany({ where: { id: { in: createdAssetIds } } });
+    await prisma.user.deleteMany({ where: { id: { in: createdUserIds } } });
     await prisma.$disconnect();
   });
 
@@ -59,6 +65,7 @@ describe('Assets approve/reject', () => {
   test('admin can reject', async () => {
     // create another asset to reject
     const a2 = await prisma.asset.create({ data: { type: 'Router', assetTag: 'R-1', needsReview: true } });
+    createdAssetIds.push(a2.id);
     const token = makeToken(adminUser);
     const res = await request(app).post(`/assets/${a2.id}/reject`).set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
@@ -69,6 +76,7 @@ describe('Assets approve/reject', () => {
 
   test('approving after reject clears rejection fields', async () => {
     const rejectedAsset = await prisma.asset.create({ data: { type: 'Switch', assetTag: 'R-2', needsReview: true } });
+    createdAssetIds.push(rejectedAsset.id);
     const adminToken = makeToken(adminUser);
 
     const rejected = await request(app)
