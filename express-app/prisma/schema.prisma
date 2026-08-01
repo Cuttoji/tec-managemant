@@ -7,80 +7,114 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Use string fields for role and type to maximize connector compatibility in local dev.
-model User {
-  id           Int      @id @default(autoincrement())
-  name         String
-  email        String   @unique
-  passwordHash String
-  role         String   @default("DISPATCHER")
-  primarySkill String?
-  importLogs    ImportLog[]
-  dispatchedLogs MaintenanceLog[] @relation("Dispatcher")
-  technicianLogs MaintenanceLog[] @relation("Technician")
-  reviewedLogs   MaintenanceLog[] @relation("Reviewer")
-  approvedAssets Asset[] @relation("ApprovedBy")
-  rejectedAssets Asset[] @relation("RejectedBy")
-  createdAt    DateTime @default(now())
+enum Role {
+  ADMIN
+  TECHNICIAN
 }
 
+enum MaintenanceStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  REVIEWED
+}
+
+model User {
+  id              Int               @id @default(autoincrement())
+  name            String
+  email           String            @unique
+  passwordHash    String
+  role            Role              @default(TECHNICIAN)
+  primarySkill    String?
+  isActive        Boolean           @default(true)
+  permissions     UserPermission[]
+  importLogs      ImportLog[]
+  dispatchedLogs  MaintenanceLog[]  @relation("Dispatcher")
+  technicianLogs  MaintenanceLog[]  @relation("Technician")
+  reviewedLogs    MaintenanceLog[]  @relation("Reviewer")
+  approvedAssets  Asset[]           @relation("ApprovedBy")
+  rejectedAssets  Asset[]           @relation("RejectedBy")
+  createdAt       DateTime          @default(now())
+}
+
+model UserPermission {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  permission String
+  grantedBy  Int
+  grantedAt  DateTime @default(now())
+
+  @@unique([userId, permission])
+  @@index([userId])
+}
 
 model Location {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now())
   assets    Asset[]
 }
 
 model Asset {
-  id           Int       @id @default(autoincrement())
-  assetTag     String?   @unique
-  serialNumber String?   @unique
-  type         String
-  model        String?
-  location     Location? @relation(fields: [locationId], references: [id])
-  locationId   Int?
-  approvedBy    Int?
-  approvedByUser User?   @relation("ApprovedBy", fields: [approvedBy], references: [id])
-  approvedAt    DateTime?
-  rejectedBy    Int?
-  rejectedByUser User?   @relation("RejectedBy", fields: [rejectedBy], references: [id])
-  rejectedAt    DateTime?
-  purchaseDate DateTime?
-  cpu          String?
-  ramGb        Int?
-  storageType  String?
-  storageGb    Int?
-  isActive     Boolean   @default(true)
-  retiredAt    DateTime?
-  needsReview  Boolean   @default(false)
-  pageCounters PageCounterLog[]
-  maintenanceLogs MaintenanceLog[]
-  createdAt    DateTime  @default(now())
+  id                Int              @id @default(autoincrement())
+  assetTag          String?          @unique
+  serialNumber      String?          @unique
+  type              String
+  model             String?
+  location          Location?        @relation(fields: [locationId], references: [id])
+  locationId        Int?
+  approvedBy        Int?
+  approvedByUser    User?            @relation("ApprovedBy", fields: [approvedBy], references: [id])
+  approvedAt        DateTime?
+  rejectedBy        Int?
+  rejectedByUser    User?            @relation("RejectedBy", fields: [rejectedBy], references: [id])
+  rejectedAt        DateTime?
+  purchaseDate      DateTime?
+  cpu               String?
+  ramGb             Int?
+  storageType       String?
+  storageGb         Int?
+  isActive          Boolean          @default(true)
+  retiredAt         DateTime?
+  needsReview       Boolean          @default(false)
+  pageCounters      PageCounterLog[]
+  maintenanceLogs   MaintenanceLog[]
+  loanedInLogs      MaintenanceLog[] @relation("LoanerAsset")
+  createdAt         DateTime         @default(now())
 }
 
-// Add indexes for performance on common lookups (define inline with models using @@index)
-
 model MaintenanceLog {
-  id           Int      @id @default(autoincrement())
-  asset        Asset    @relation(fields: [assetId], references: [id])
-  assetId      Int
-  dispatcherId  Int
-  dispatcher    User     @relation("Dispatcher", fields: [dispatcherId], references: [id])
-  technicianId  Int?
-  technician    User?    @relation("Technician", fields: [technicianId], references: [id])
-  issueDetails  String
-  repairDetails String?
-  status        String   @default("OPEN")
-  claimedAt     DateTime?
-  completedAt   DateTime?
-  reviewedBy    Int?
-  reviewer      User?    @relation("Reviewer", fields: [reviewedBy], references: [id])
-  reviewedAt    DateTime?
-  reviewNotes   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  components    ComponentLog[]
+  id                 Int               @id @default(autoincrement())
+  asset              Asset             @relation(fields: [assetId], references: [id])
+  assetId            Int
+  dispatcherId       Int
+  dispatcher         User              @relation("Dispatcher", fields: [dispatcherId], references: [id])
+  technicianId       Int?
+  technician         User?             @relation("Technician", fields: [technicianId], references: [id])
+  issueDetails       String
+  // --- repair detail fields ---
+  symptom            String?
+  partReplacedAt     DateTime?
+  brand              String?
+  totalPageAtRepair  Int?
+  repairDetails      String?
+  usedLoaner         Boolean           @default(false)
+  loanerAssetId      Int?
+  loanerAsset        Asset?            @relation("LoanerAsset", fields: [loanerAssetId], references: [id])
+  loanerPageStart    Int?
+  loanerPageEnd      Int?
+  // ----------------------------
+  status             MaintenanceStatus @default(OPEN)
+  claimedAt          DateTime?
+  completedAt        DateTime?
+  reviewedBy         Int?
+  reviewer           User?             @relation("Reviewer", fields: [reviewedBy], references: [id])
+  reviewedAt         DateTime?
+  reviewNotes        String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  components         ComponentLog[]
 
   @@index([assetId, status])
   @@index([technicianId, status])
@@ -88,28 +122,28 @@ model MaintenanceLog {
 }
 
 model ComponentLog {
-  id             Int      @id @default(autoincrement())
-  maintenance    MaintenanceLog @relation(fields: [maintenanceId], references: [id])
-  maintenanceId  Int
-  part           String
-  quantity       Int
+  id            Int            @id @default(autoincrement())
+  maintenance   MaintenanceLog @relation(fields: [maintenanceId], references: [id])
+  maintenanceId Int
+  part          String
+  quantity      Int
 }
 
 model PageCounterLog {
-  id        Int      @id @default(autoincrement())
-  asset     Asset    @relation(fields: [assetId], references: [id])
-  assetId   Int
-  total     Int?
+  id         Int      @id @default(autoincrement())
+  asset      Asset    @relation(fields: [assetId], references: [id])
+  assetId    Int
+  total      Int?
   recordedAt DateTime @default(now())
 }
 
 model ImportLog {
-  id           Int      @id @default(autoincrement())
-  filename     String
-  rawData      String
-  parsed       String
+  id             Int      @id @default(autoincrement())
+  filename       String
+  filePath       String
+  parsed         String
   unmatchedCount Int
-  createdBy    Int?
-  createdByUser User?   @relation(fields: [createdBy], references: [id])
-  createdAt    DateTime @default(now())
+  createdBy      Int?
+  createdByUser  User?    @relation(fields: [createdBy], references: [id])
+  createdAt      DateTime @default(now())
 }
