@@ -1,0 +1,63 @@
+name: CI - Backend (Postgres)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-postgres:
+    name: Backend tests on Postgres
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies (backend)
+        working-directory: express-app
+        run: npm ci
+
+      - name: Wait for Postgres
+        run: |
+          for i in {1..10}; do
+            pg_isready -h localhost -p 5432 -U postgres && break || sleep 1;
+          done
+
+      - name: Prepare Postgres Prisma schema
+        working-directory: express-app
+        run: |
+          # Create a Postgres-based schema copy for CI
+          sed 's/provider = "sqlite"/provider = "postgresql"/' prisma/schema.prisma > prisma/schema.postgres.prisma
+
+      - name: Apply Prisma schema to Postgres
+        working-directory: express-app
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: |
+          npx prisma validate --schema=prisma/schema.postgres.prisma
+          npx prisma db push --schema=prisma/schema.postgres.prisma --skip-generate
+          npx prisma generate --schema=prisma/schema.postgres.prisma
+
+      - name: Run backend tests
+        working-directory: express-app
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: npm test --silent
