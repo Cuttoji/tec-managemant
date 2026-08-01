@@ -41,20 +41,13 @@ jobs:
             pg_isready -h localhost -p 5432 -U postgres && break || sleep 1;
           done
 
-      - name: Prepare Postgres Prisma schema
-        working-directory: express-app
-        run: |
-          # Create a Postgres-based schema copy for CI
-          sed 's/provider = "sqlite"/provider = "postgresql"/' prisma/schema.prisma > prisma/schema.postgres.prisma
-
-      - name: Apply Prisma schema to Postgres
+      - name: Run Prisma migrations against Postgres
         working-directory: express-app
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
         run: |
-          npx prisma validate --schema=prisma/schema.postgres.prisma
-          npx prisma db push --schema=prisma/schema.postgres.prisma --skip-generate
-          npx prisma generate --schema=prisma/schema.postgres.prisma
+          npx prisma migrate deploy
+          npx prisma generate
 
       - name: Run backend tests
         working-directory: express-app
