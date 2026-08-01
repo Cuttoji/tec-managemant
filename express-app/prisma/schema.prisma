@@ -34,6 +34,7 @@ model Asset {
   assetTag     String?   @unique
   serialNumber String?   @unique
   type         String
+  model        String?
   location     Location? @relation(fields: [locationId], references: [id])
   locationId   Int?
   approvedBy    Int?

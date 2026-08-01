@@ -8,7 +8,8 @@ exports.listAssets = async (req, res) => {
 
     const where = {};
     if (req.query.serial) where.serialNumber = { contains: req.query.serial };
-    if (req.query.model) where.assetTag = { contains: req.query.model };
+    if (req.query.assetTag) where.assetTag = { contains: req.query.assetTag };
+    if (req.query.model) where.model = { contains: req.query.model };
 
     const [items, total] = await Promise.all([
       prisma.asset.findMany({ where, skip, take: limit, orderBy: { id: 'desc' } }),
@@ -47,6 +48,8 @@ exports.approveAsset = async (req, res) => {
         isActive: true,
         approvedBy: req.user.id,
         approvedAt: new Date(),
+        rejectedBy: null,
+        rejectedAt: null,
       },
     });
 
@@ -70,6 +73,8 @@ exports.rejectAsset = async (req, res) => {
         isActive: false,
         rejectedBy: req.user.id,
         rejectedAt: new Date(),
+        approvedBy: null,
+        approvedAt: null,
       },
     });
 
