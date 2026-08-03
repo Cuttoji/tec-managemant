@@ -111,7 +111,7 @@ export default function Home() {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Asset Tag</th>
+                    <th>รหัสทรัพย์สิน</th>
                     <th>Serial Number</th>
                     <th>ประเภท</th>
                     <th>Model</th>
@@ -207,7 +207,7 @@ export default function Home() {
                   <input className="form-input" value={form.model} onChange={e => setForm({ ...form, model: e.target.value })} placeholder="เช่น Brother MFC-L3750CDW" />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Asset Tag</label>
+                  <label className="form-label">รหัสทรัพย์สิน</label>
                   <input className="form-input" value={form.assetTag} onChange={e => setForm({ ...form, assetTag: e.target.value })} placeholder="เช่น IT-001" />
                 </div>
                 <div className="form-group">

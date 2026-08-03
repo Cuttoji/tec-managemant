@@ -50,10 +50,11 @@ model UserPermission {
 }
 
 model Location {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  assets    Asset[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  mapImageUrl String?
+  createdAt   DateTime @default(now())
+  assets      Asset[]
 }
 
 model Asset {

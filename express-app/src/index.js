@@ -1,4 +1,5 @@
 const express = require('express');
+const path    = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -11,6 +12,8 @@ const locationsRouter = require('./routes/locations');
 const maintenanceRouter = require('./routes/maintenance');
 
 app.use(express.json());
+// Serve uploaded map images
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/health', healthRouter);
 // Limit import body size to 1MB to prevent huge uploads; text parser handles XML and CSV
 app.use('/import', express.text({ type: ['application/xml', 'text/xml', 'text/*'], limit: '1mb' }));

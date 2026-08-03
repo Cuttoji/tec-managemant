@@ -1,12 +1,12 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/router';
-import { storeAuthResponse } from '../src/lib/api';
+import { post, storeAuthResponse } from '../src/lib/api';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const IS_MOCK = process.env.NEXT_PUBLIC_MOCK === 'true';
 
 export default function Login() {
-  const [email, setEmail]       = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail]       = useState(IS_MOCK ? 'admin@demo.com' : '');
+  const [password, setPassword] = useState(IS_MOCK ? 'demo1234' : '');
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
   const router = useRouter();
@@ -16,13 +16,8 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      const res  = await fetch(`${API_BASE}/auth/login`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ email, password }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Login failed');
+      const json = await post('/auth/login', { email, password });
+      if (!json.token) throw new Error(json.error || 'Login failed');
       storeAuthResponse(json);
       router.push('/');
     } catch (err) {
@@ -54,6 +49,11 @@ export default function Login() {
         <p style={{ fontSize: 17, opacity: .85, maxWidth: 340, lineHeight: 1.6 }}>
           ระบบจัดการครุภัณฑ์และติดตามการซ่อมบำรุง สำหรับทีมเทคนิค
         </p>
+        {IS_MOCK && (
+          <div style={{ marginTop: 24, padding: '10px 14px', background: 'rgba(255,255,255,.15)', borderRadius: 8, fontSize: 13, border: '1px solid rgba(255,255,255,.25)' }}>
+            🧪 <strong>Mock Mode</strong> — ทำงานโดยไม่ต้องรัน backend
+          </div>
+        )}
         <div style={{ marginTop: 40, display: 'flex', flexDirection: 'column', gap: 14 }}>
           {[
             { icon: '🖥️', text: 'ติดตามสถานะครุภัณฑ์แบบ real-time' },
@@ -82,7 +82,7 @@ export default function Login() {
             เข้าสู่ระบบ
           </h2>
           <p style={{ fontSize: 13, color: 'var(--gray-500)', marginBottom: 32 }}>
-            กรุณาใส่ข้อมูลผู้ใช้งานของคุณ
+            {IS_MOCK ? '🧪 Mock Mode — กด เข้าสู่ระบบ ได้เลย' : 'กรุณาใส่ข้อมูลผู้ใช้งานของคุณ'}
           </p>
 
           <form onSubmit={submit}>

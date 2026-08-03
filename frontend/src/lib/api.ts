@@ -1,4 +1,7 @@
+import { mockGet, mockPost, mockPut, mockDel } from './mockApi';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const IS_MOCK  = process.env.NEXT_PUBLIC_MOCK === 'true';
 
 export function authHeader(): Record<string, string> {
   if (typeof window === 'undefined') return {};
@@ -15,6 +18,7 @@ function handle401() {
 }
 
 export async function get(path: string) {
+  if (IS_MOCK) return mockGet(path);
   const res = await fetch(`${API_BASE}${path}`, { headers: { ...authHeader() } });
   if (res.status === 401) { handle401(); throw new Error('Unauthorized'); }
   if (!res.ok) throw new Error((await res.json()).error || 'Request failed');
@@ -22,6 +26,7 @@ export async function get(path: string) {
 }
 
 export async function post(path: string, body?: any, contentType = 'application/json') {
+  if (IS_MOCK) return mockPost(path, body);
   const headers: Record<string, string> = { ...authHeader() };
   if (contentType) headers['Content-Type'] = contentType;
   const res = await fetch(`${API_BASE}${path}`, {
@@ -37,6 +42,7 @@ export async function post(path: string, body?: any, contentType = 'application/
 }
 
 export async function put(path: string, body: any) {
+  if (IS_MOCK) return mockPut(path, body);
   const res = await fetch(`${API_BASE}${path}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', ...authHeader() },
@@ -48,6 +54,7 @@ export async function put(path: string, body: any) {
 }
 
 export async function patch(path: string, body: any) {
+  if (IS_MOCK) return mockPut(path, body);
   const res = await fetch(`${API_BASE}${path}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...authHeader() },
@@ -59,6 +66,7 @@ export async function patch(path: string, body: any) {
 }
 
 export async function del(path: string) {
+  if (IS_MOCK) return mockDel(path);
   const res = await fetch(`${API_BASE}${path}`, {
     method: 'DELETE',
     headers: { ...authHeader() },
