@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // directUrl used by migrate commands (bypasses pooler)
+  // directUrl = env("DATABASE_DIRECT_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  TECHNICIAN
+}
+
+enum AssetType {
+  PRINTER
+  COMPUTER
+  SCANNER
+  OTHER
+}
+
+enum MaintenanceStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  REVIEWED
+}
+
+// ─── User & Auth ──────────────────────────────────────────────────────────────
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(TECHNICIAN)
+  primarySkill String?
+  isActive     Boolean  @default(true)
+  lineUserId   String?  @unique   // LINE Messaging API — future use
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  permissions     UserPermission[]
+  importLogs      ImportLog[]
+  auditLogs       AuditLog[]
+  dispatchedLogs  MaintenanceLog[] @relation("Dispatcher")
+  technicianLogs  MaintenanceLog[] @relation("Technician")
+  reviewedLogs    MaintenanceLog[] @relation("Reviewer")
+  approvedAssets  Asset[]          @relation("ApprovedBy")
+  rejectedAssets  Asset[]          @relation("RejectedBy")
+}
+
+model UserPermission {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  permission String
+  grantedBy  Int
+  grantedAt  DateTime @default(now())
+
+  @@unique([userId, permission])
+  @@index([userId])
+}
+
+// ─── Location ─────────────────────────────────────────────────────────────────
+
+model Location {
+  id          Int      @id @default(autoincrement())
+  name        String
+  building    String?
+  floor       String?
+  mapImageUrl String?  // Cloud Storage URL
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  assets      Asset[]
+}
+
+// ─── Asset ────────────────────────────────────────────────────────────────────
+
+model Asset {
+  id           Int       @id @default(autoincrement())
+  assetTag     String?   @unique
+  serialNumber String?   @unique
+  type         AssetType
+  model        String?
+  locationId   Int?
+  location     Location? @relation(fields: [locationId], references: [id])
+
+  // Status flags
+  isActive    Boolean  @default(true)
+  needsReview Boolean  @default(false)
+  retiredAt   DateTime?
+
+  // Approval workflow
+  approvedBy     Int?
+  approvedByUser User?     @relation("ApprovedBy", fields: [approvedBy], references: [id])
+  approvedAt     DateTime?
+  rejectedBy     Int?
+  rejectedByUser User?     @relation("RejectedBy", fields: [rejectedBy], references: [id])
+  rejectedAt     DateTime?
+
+  // Metadata
+  purchaseDate DateTime?
+  warrantyDate DateTime?
+  notes        String?
+
+  // Computer-specific specs
+  cpu         String?
+  ramGb       Int?
+  storageType String?
+  storageGb   Int?
+  os          String?
+
+  // Relations
+  images          AssetImage[]
+  pageCounters    PageCounterLog[]
+  maintenanceLogs MaintenanceLog[]
+  loanedInLogs    MaintenanceLog[] @relation("LoanerAsset")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([type, isActive])
+  @@index([locationId])
+  @@index([needsReview])
+}
+
+model AssetImage {
+  id        Int      @id @default(autoincrement())
+  assetId   Int
+  asset     Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  url       String   // Cloud Storage URL
+  caption   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([assetId])
+}
+
+model PageCounterLog {
+  id         Int      @id @default(autoincrement())
+  assetId    Int
+  asset      Asset    @relation(fields: [assetId], references: [id])
+  total      Int
+  source     String   @default("MANUAL") // "MANUAL" | "BRADMIN_IMPORT"
+  recordedAt DateTime @default(now())
+
+  @@index([assetId, recordedAt])
+}
+
+// ─── Maintenance ──────────────────────────────────────────────────────────────
+
+model MaintenanceLog {
+  id           Int               @id @default(autoincrement())
+  assetId      Int
+  asset        Asset             @relation(fields: [assetId], references: [id])
+  dispatcherId Int
+  dispatcher   User              @relation("Dispatcher", fields: [dispatcherId], references: [id])
+  technicianId Int?
+  technician   User?             @relation("Technician", fields: [technicianId], references: [id])
+  reviewedBy   Int?
+  reviewer     User?             @relation("Reviewer", fields: [reviewedBy], references: [id])
+
+  // Content
+  issueDetails  String
+  symptom       String?
+  repairDetails String?
+  brand         String?
+  reviewNotes   String?
+  status        MaintenanceStatus @default(OPEN)
+
+  // Loaner tracking
+  usedLoaner      Boolean @default(false)
+  loanerAssetId   Int?
+  loanerAsset     Asset?  @relation("LoanerAsset", fields: [loanerAssetId], references: [id])
+  loanerPageStart Int?
+  loanerPageEnd   Int?
+
+  // Page counter at time of repair
+  totalPageAtRepair Int?
+  partReplacedAt    DateTime?
+
+  // Timestamps
+  claimedAt   DateTime?
+  completedAt DateTime?
+  reviewedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  components ComponentLog[]
+
+  @@index([status])
+  @@index([assetId, status])
+  @@index([technicianId, status])
+  @@index([createdAt])
+}
+
+model ComponentLog {
+  id            Int            @id @default(autoincrement())
+  maintenanceId Int
+  maintenance   MaintenanceLog @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
+  part          String
+  quantity      Int
+  pageAtReplacement Int?       // page counter at time of replacement
+
+  @@index([maintenanceId])
+}
+
+// ─── Import / Audit ───────────────────────────────────────────────────────────
+
+model ImportLog {
+  id             Int      @id @default(autoincrement())
+  filename       String
+  filePath       String?
+  parsed         Json?
+  unmatchedCount Int      @default(0)
+  createdBy      Int?
+  createdByUser  User?    @relation(fields: [createdBy], references: [id])
+  createdAt      DateTime @default(now())
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String   // e.g. "asset.update", "ticket.claim"
+  targetType String   // "Asset" | "MaintenanceLog" | "User" | "Location"
+  targetId   Int
+  before     Json?
+  after      Json?
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([userId])
+  @@index([createdAt])
+}

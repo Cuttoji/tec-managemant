@@ -29,6 +29,7 @@ model User {
   isActive        Boolean           @default(true)
   permissions     UserPermission[]
   importLogs      ImportLog[]
+  auditLogs       AuditLog[]
   dispatchedLogs  MaintenanceLog[]  @relation("Dispatcher")
   technicianLogs  MaintenanceLog[]  @relation("Technician")
   reviewedLogs    MaintenanceLog[]  @relation("Reviewer")
@@ -147,4 +148,22 @@ model ImportLog {
   createdBy      Int?
   createdByUser  User?    @relation(fields: [createdBy], references: [id])
   createdAt      DateTime @default(now())
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String   // e.g. "asset.update", "maintenance.complete", "user.deactivate"
+  targetType String   // "Asset" | "MaintenanceLog" | "User" | "Location"
+  targetId   Int
+  before     Json?    // snapshot of fields before change
+  after      Json?    // snapshot of fields after change
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([userId])
+  @@index([createdAt])
 }
