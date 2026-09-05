@@ -49,7 +49,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
       {/* Container */}
       <div className="fixed bottom-5 right-5 z-[100] flex flex-col gap-2 pointer-events-none">
-        {toasts.map((t) => (
+        {toasts.map((t: any) => (
           <ToastItem
             key={t.id}
             toast={t}

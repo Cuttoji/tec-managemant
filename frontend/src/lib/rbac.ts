@@ -1,4 +1,5 @@
-import type { Role } from '@prisma/client';
+// Prisma `Role` type unavailable in this build — declare local Role union
+export type Role = 'ADMIN' | 'TECHNICIAN';
 
 // ─── Permission registry ──────────────────────────────────────────────────────
 
@@ -13,7 +14,7 @@ export type Permission =
   | 'user:manage'
   | 'import:run';
 
-const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
+const ROLE_PERMISSIONS: Record<string, Permission[]> = {
   ADMIN: [
     'maintenance:claim',
     'maintenance:complete',
@@ -35,7 +36,7 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
 // ─── Checks ───────────────────────────────────────────────────────────────────
 
 /** Check if a role has a base permission */
-export function roleHas(role: Role, permission: Permission): boolean {
+export function roleHas(role: string, permission: Permission): boolean {
   return ROLE_PERMISSIONS[role]?.includes(permission) ?? false;
 }
 
@@ -44,7 +45,7 @@ export function roleHas(role: Role, permission: Permission): boolean {
  * Use this in Server Actions and components.
  */
 export function can(
-  role: Role,
+  role: string,
   extraPermissions: string[],
   permission: Permission
 ): boolean {
@@ -53,7 +54,7 @@ export function can(
 
 /** Throw FORBIDDEN if user doesn't have permission */
 export function assertPermission(
-  role: Role,
+  role: string,
   extraPermissions: string[],
   permission: Permission
 ): void {
@@ -63,6 +64,6 @@ export function assertPermission(
 }
 
 /** Throw FORBIDDEN if user is not admin */
-export function assertAdmin(role: Role): void {
+export function assertAdmin(role: string): void {
   if (role !== 'ADMIN') throw new Error('FORBIDDEN');
 }

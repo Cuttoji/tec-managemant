@@ -1,7 +1,7 @@
 const { requireRole } = require('../src/middleware/auth');
 
 test('requireRole returns 403 for non-admin', () => {
-  const req = { user: { id: 1, role: 'DISPATCHER' } };
+  const req = { user: { id: 1, role: 'TECHNICIAN' } };
   const res = { status: jest.fn(() => res), json: jest.fn() };
   let calledNext = false;
   const next = () => { calledNext = true; };

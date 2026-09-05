@@ -77,7 +77,7 @@ export async function getPrinterConsumableSummary(from?: string, to?: string) {
     where: { type: 'PRINTER', isActive: true },
     select: { id: true },
   });
-  const printerIds = printerAssets.map((a) => a.id);
+  const printerIds = printerAssets.map((a: any) => a.id);
 
   const where: Record<string, unknown> = {
     assetId:    { in: printerIds },
@@ -103,8 +103,8 @@ export async function getPrinterConsumableSummary(from?: string, to?: string) {
   });
 
   // Flatten components with context
-  const rows = jobs.flatMap((m) =>
-    m.components.map((c) => ({
+  const rows = jobs.flatMap((m: any) =>
+    m.components.map((c: any) => ({
       maintenanceId: m.id,
       assetId:       m.assetId,
       assetTag:      m.asset.assetTag,
@@ -119,12 +119,12 @@ export async function getPrinterConsumableSummary(from?: string, to?: string) {
 
   // Toner/Drum totals
   const tonerTotal = rows
-    .filter((r) => /toner/i.test(r.part))
-    .reduce((s, r) => s + r.quantity, 0);
+    .filter((r: any) => /toner/i.test(r.part))
+    .reduce((s: number, r: any) => s + r.quantity, 0);
 
   const drumTotal = rows
-    .filter((r) => /drum/i.test(r.part))
-    .reduce((s, r) => s + r.quantity, 0);
+    .filter((r: any) => /drum/i.test(r.part))
+    .reduce((s: number, r: any) => s + r.quantity, 0);
 
   return {
     rows,

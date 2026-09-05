@@ -22,7 +22,7 @@ describe('Assets approve/reject', () => {
   beforeAll(async () => {
     // create users and an asset in test db
     adminUser = await prisma.user.create({ data: { name: 'Admin', email: 'admin@example.com', passwordHash: 'x', role: 'ADMIN' } });
-    dispatcherUser = await prisma.user.create({ data: { name: 'Disp', email: 'disp@example.com', passwordHash: 'x', role: 'DISPATCHER' } });
+    dispatcherUser = await prisma.user.create({ data: { name: 'Disp', email: 'disp@example.com', passwordHash: 'x', role: 'TECHNICIAN' } });
     createdUserIds.push(adminUser.id, dispatcherUser.id);
     asset = await prisma.asset.create({ data: { type: 'Printer', assetTag: 'T-100', needsReview: true } });
     modelAsset = await prisma.asset.create({ data: { type: 'Computer', assetTag: 'T-200', model: 'OptiPlex 7090', needsReview: true } });

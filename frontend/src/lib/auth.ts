@@ -1,9 +1,8 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { db } from '@/lib/db';
-import type { Role } from '@prisma/client';
+// Prisma `Role` type can be unavailable in the frontend build; use `string` instead
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -13,16 +12,16 @@ declare module 'next-auth' {
       id: string;
       name: string;
       email: string;
-      role: Role;
+      role: string;
       permissions: string[];
     };
   }
   interface User {
-    id: string;
-    name: string;
-    email: string;
-    role: Role;
-    permissions: string[];
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+    role?: string | null;
+    permissions?: string[] | null;
   }
 }
 
@@ -62,6 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
+        const bcrypt = (await import('bcryptjs')).default;
         // Validate input shape
         const parsed = z
           .object({
@@ -90,7 +90,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const permissions: string[] =
           user.role === 'ADMIN'
             ? [...ALL_ADMIN_PERMISSIONS]
-            : user.permissions.map((p) => p.permission);
+            : user.permissions.map((p: any) => p.permission);
 
         return {
           id:          String(user.id),
@@ -114,7 +114,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     session({ session, token }) {
       session.user.id          = token.id as string;
-      session.user.role        = token.role as Role;
+      session.user.role        = token.role as string;
       session.user.permissions = token.permissions as string[];
       return session;
     },

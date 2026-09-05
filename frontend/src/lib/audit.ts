@@ -45,7 +45,7 @@ export function writeAuditLog(payload: AuditPayload): void {
         userAgent: userAgent?.slice(0, 500),
       },
     })
-    .catch((err) =>
+    .catch((err: unknown) =>
       console.error('[audit] write failed:', (err as Error).message)
     );
 }

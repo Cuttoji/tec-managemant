@@ -1,9 +1,5 @@
 {
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/assets/[id]": "pages/assets/[id].js",
-  "/maintenance": "pages/maintenance.js",
-  "/": "pages/index.js",
-  "/printer-summary": "pages/printer-summary.js"
+  "/_document": "pages/_document.js"
 }

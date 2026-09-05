@@ -9,7 +9,7 @@ export const createTicketSchema = z.object({
 
 // ─── Complete (ช่างปิดงาน) ────────────────────────────────────────────────────
 
-export const completeTicketSchema = z.object({
+const completeTicketBaseSchema = z.object({
   repairDetails:     z.string().min(1, 'กรุณากรอกรายละเอียดการซ่อม').max(5000),
   symptom:           z.string().max(500).optional().nullable(),
   brand:             z.string().max(200).optional().nullable(),
@@ -19,14 +19,16 @@ export const completeTicketSchema = z.object({
   loanerAssetId:     z.coerce.number().int().positive().optional().nullable(),
   loanerPageStart:   z.coerce.number().int().min(0).optional().nullable(),
   loanerPageEnd:     z.coerce.number().int().min(0).optional().nullable(),
-}).refine(
+});
+
+export const completeTicketSchema = completeTicketBaseSchema.refine(
   (d) => !d.usedLoaner || !!d.loanerAssetId,
   { message: 'กรุณาเลือกเครื่องสำรอง', path: ['loanerAssetId'] }
 );
 
 // ─── Edit repair details (after complete) ─────────────────────────────────────
 
-export const editRepairSchema = completeTicketSchema.partial().extend({
+export const editRepairSchema = completeTicketBaseSchema.partial().extend({
   repairDetails: z.string().min(1).max(5000).optional(),
 });
 

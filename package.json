@@ -1,0 +1,8 @@
+{
+  "name": "tec-managemant",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "express-app"
+  ]
+}

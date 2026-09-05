@@ -15,7 +15,7 @@ async function fetchPrinterSummary(from?: string, to?: string) {
     where: { type: 'PRINTER', isActive: true },
     select: { id: true },
   });
-  const printerIds = printers.map((p) => p.id);
+  const printerIds = printers.map((p: any) => p.id);
 
   const where: Record<string, unknown> = {
     assetId:    { in: printerIds },
@@ -41,8 +41,8 @@ async function fetchPrinterSummary(from?: string, to?: string) {
   });
 
   // Flatten components into rows
-  const rows = jobs.flatMap((m) =>
-    m.components.map((c) => ({
+  const rows = jobs.flatMap((m: any) =>
+    m.components.map((c: any) => ({
       maintenanceId: m.id,
       assetId:       m.assetId,
       assetTag:      m.asset.assetTag,
@@ -58,7 +58,7 @@ async function fetchPrinterSummary(from?: string, to?: string) {
 
   // Monthly breakdown for charts: { "2026-05": { toner: 1, drum: 0 } }
   const monthly: Record<string, { toner: number; drum: number }> = {};
-  rows.forEach((r) => {
+  rows.forEach((r: any) => {
     if (!r.completedAt) return;
     const ym = r.completedAt.slice(0, 7);
     if (!monthly[ym]) monthly[ym] = { toner: 0, drum: 0 };
@@ -66,8 +66,8 @@ async function fetchPrinterSummary(from?: string, to?: string) {
     else if (/drum/i.test(r.part)) monthly[ym].drum  += r.quantity;
   });
 
-  const tonerTotal = rows.filter((r) => /toner/i.test(r.part)).reduce((s, r) => s + r.quantity, 0);
-  const drumTotal  = rows.filter((r) => /drum/i.test(r.part)).reduce((s, r) => s + r.quantity, 0);
+  const tonerTotal = rows.filter((r: any) => /toner/i.test(r.part)).reduce((s: number, r: any) => s + r.quantity, 0);
+  const drumTotal  = rows.filter((r: any) => /drum/i.test(r.part)).reduce((s: number, r: any) => s + r.quantity, 0);
 
   return {
     rows,
@@ -76,11 +76,11 @@ async function fetchPrinterSummary(from?: string, to?: string) {
       toner:    tonerTotal,
       drum:     drumTotal,
       items:    rows.length,
-      printers: new Set(rows.map((r) => r.assetId)).size,
+      printers: new Set(rows.map((r: any) => r.assetId)).size,
     },
     // Pre-split by site for the tabs
-    oboj:   rows.filter((r) => r.site === 'oboj'),
-    taksin: rows.filter((r) => r.site === 'taksin'),
+    oboj:   rows.filter((r: any) => r.site === 'oboj'),
+    taksin: rows.filter((r: any) => r.site === 'taksin'),
   };
 }
 
