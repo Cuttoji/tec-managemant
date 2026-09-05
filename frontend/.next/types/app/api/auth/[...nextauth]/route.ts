@@ -1,4 +1,4 @@
-// File: C:\Users\harit\Desktop\tec-managemant\frontend\src\app\api\auth\[...nextauth]\route.ts
+// File: /home/runner/work/tec-managemant/tec-managemant/frontend/src/app/api/auth/[...nextauth]/route.ts
 import * as entry from '../../../../../../src/app/api/auth/[...nextauth]/route.js'
 import type { NextRequest } from 'next/server.js'
 

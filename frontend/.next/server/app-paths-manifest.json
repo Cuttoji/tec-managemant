@@ -5,12 +5,12 @@
   "/login/page": "app/login/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/(dashboard)/assets/[id]/page": "app/(dashboard)/assets/[id]/page.js",
-  "/(dashboard)/review/page": "app/(dashboard)/review/page.js",
-  "/(dashboard)/import/page": "app/(dashboard)/import/page.js",
-  "/(dashboard)/printer-summary/page": "app/(dashboard)/printer-summary/page.js",
   "/(dashboard)/assets/page": "app/(dashboard)/assets/page.js",
-  "/(dashboard)/tickets/page": "app/(dashboard)/tickets/page.js",
+  "/(dashboard)/printer-summary/page": "app/(dashboard)/printer-summary/page.js",
+  "/(dashboard)/review/page": "app/(dashboard)/review/page.js",
   "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(dashboard)/audit-logs/page": "app/(dashboard)/audit-logs/page.js",
   "/(dashboard)/users/page": "app/(dashboard)/users/page.js",
-  "/(dashboard)/audit-logs/page": "app/(dashboard)/audit-logs/page.js"
+  "/(dashboard)/tickets/page": "app/(dashboard)/tickets/page.js",
+  "/(dashboard)/import/page": "app/(dashboard)/import/page.js"
 }
