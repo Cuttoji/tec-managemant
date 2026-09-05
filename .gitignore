@@ -2,3 +2,4 @@
 !/.github/workflows/
 !/.github/workflows/**
 node_modules
+frontend/.next
