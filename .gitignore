@@ -3,3 +3,16 @@
 !/.github/workflows/**
 node_modules
 frontend/.next
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+
+# Logs and coverage
+npm-debug.log
+coverage/
