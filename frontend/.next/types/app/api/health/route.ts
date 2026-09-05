@@ -1,4 +1,4 @@
-// File: C:\Users\harit\Desktop\tec-managemant\frontend\src\app\api\health\route.ts
+// File: /home/runner/work/tec-managemant/tec-managemant/frontend/src/app/api/health/route.ts
 import * as entry from '../../../../../src/app/api/health/route.js'
 import type { NextRequest } from 'next/server.js'
 

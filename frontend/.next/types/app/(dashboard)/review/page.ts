@@ -1,4 +1,4 @@
-// File: C:\Users\harit\Desktop\tec-managemant\frontend\src\app\(dashboard)\review\page.tsx
+// File: /home/runner/work/tec-managemant/tec-managemant/frontend/src/app/(dashboard)/review/page.tsx
 import * as entry from '../../../../../src/app/(dashboard)/review/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
