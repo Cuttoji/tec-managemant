@@ -5,7 +5,7 @@ import { requireSession }   from '@/lib/auth';
 import { safeAction }       from '@/lib/errors';
 import { assertPermission } from '@/lib/rbac';
 import { revalidateAssets } from '@/lib/cache';
-import { revalidateTag } from 'next/cache';
+import { revalidateTag } from '@/lib/cache';
 import { importCsvSchema }  from './schema';
 import { parseBrAdminCsv }  from './bradmin-parser';
 

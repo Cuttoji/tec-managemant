@@ -6,12 +6,18 @@ export async function GET() {
   let dbStatus = 'ok';
   let dbLatencyMs: number | null = null;
 
-  try {
-    await db.$queryRaw`SELECT 1`;
-    dbLatencyMs = Date.now() - start;
-  } catch (err) {
+  // Avoid attempting a DB ping at build-time or when DATABASE_URL is not set
+  const dbUrl = process.env.DATABASE_URL ?? process.env.NEXT_PUBLIC_DATABASE_URL;
+  if (!dbUrl || /localhost|127\.0\.0\.1/.test(dbUrl)) {
     dbStatus = 'unreachable';
-    console.error('[health] DB ping failed:', (err as Error).message);
+  } else {
+    try {
+      await db.$queryRaw`SELECT 1`;
+      dbLatencyMs = Date.now() - start;
+    } catch (err) {
+      dbStatus = 'unreachable';
+      console.error('[health] DB ping failed:', (err as Error).message);
+    }
   }
 
   const mem = process.memoryUsage();
