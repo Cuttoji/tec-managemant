@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/auth/[...nextauth]":{},"/import":{},"/assets":{},"/review":{},"/printer-summary":{},"/dashboard":{},"/users":{},"/audit-logs":{},"/tickets":{}}}
+{"version":1,"functions":{"/api/auth/[...nextauth]":{},"/assets":{},"/review":{},"/printer-summary":{},"/tickets":{},"/dashboard":{},"/users":{},"/import":{},"/audit-logs":{}}}
