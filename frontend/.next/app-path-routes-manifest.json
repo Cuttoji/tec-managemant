@@ -1,1 +1,17 @@
-{"/_not-found/page":"/_not-found","/api/health/route":"/api/health","/login/page":"/login","/page":"/","/api/auth/[...nextauth]/route":"/api/auth/[...nextauth]","/(dashboard)/printer-summary/page":"/printer-summary","/(dashboard)/assets/[id]/page":"/assets/[id]","/(dashboard)/import/page":"/import","/(dashboard)/dashboard/page":"/dashboard","/(dashboard)/assets/page":"/assets","/(dashboard)/review/page":"/review","/(dashboard)/users/page":"/users","/(dashboard)/audit-logs/page":"/audit-logs","/(dashboard)/tickets/page":"/tickets"}
+{
+  "/(dashboard)/assets/[id]/page": "/assets/[id]",
+  "/(dashboard)/assets/page": "/assets",
+  "/(dashboard)/audit-logs/page": "/audit-logs",
+  "/(dashboard)/dashboard/page": "/dashboard",
+  "/(dashboard)/import/page": "/import",
+  "/(dashboard)/printer-summary/page": "/printer-summary",
+  "/(dashboard)/review/page": "/review",
+  "/(dashboard)/tickets/page": "/tickets",
+  "/(dashboard)/users/page": "/users",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]",
+  "/api/health/route": "/api/health",
+  "/login/page": "/login",
+  "/page": "/"
+}

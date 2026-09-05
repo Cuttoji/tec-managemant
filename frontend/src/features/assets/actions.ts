@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidateTag }    from 'next/cache';
+import { revalidateTag }    from '@/lib/cache';
 import { db }               from '@/lib/db';
 import { requireSession }   from '@/lib/auth';
 import { writeAuditLog }    from '@/lib/audit';

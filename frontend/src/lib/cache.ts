@@ -1,4 +1,6 @@
-import { revalidateTag, revalidatePath, unstable_cache } from 'next/cache';
+import { revalidateTag as _revalidateTag, revalidatePath, unstable_cache } from 'next/cache';
+// Wrapper to accommodate Next's changing types across versions
+export const revalidateTag = (...args: any[]) => (_revalidateTag as any)(...args);
 import { db } from '@/lib/db';
 
 // ─── Cache tag constants ──────────────────────────────────────────────────────

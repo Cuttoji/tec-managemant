@@ -1,0 +1,60 @@
+{
+  "node": {
+    "406c098015af35da0a0f239a5d5ba046f126440311": {
+      "workers": {
+        "app/(dashboard)/users/page": {
+          "moduleId": 22681,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "createUserAction",
+      "filename": "frontend/src/features/users/actions.ts"
+    },
+    "60b4116128e6069829341aeb4f1ca049935bc73191": {
+      "workers": {
+        "app/(dashboard)/users/page": {
+          "moduleId": 22681,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "updateUserAction",
+      "filename": "frontend/src/features/users/actions.ts"
+    },
+    "400dcd91d8d72021c27a3374c1ab55490a8cf67af9": {
+      "workers": {
+        "app/(dashboard)/users/page": {
+          "moduleId": 22681,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "deactivateUserAction",
+      "filename": "frontend/src/features/users/actions.ts"
+    },
+    "6037f3d79210a185a39da2a1a7843c1891f0c05075": {
+      "workers": {
+        "app/(dashboard)/users/page": {
+          "moduleId": 22681,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "grantPermissionAction",
+      "filename": "frontend/src/features/users/actions.ts"
+    },
+    "60a689159875bbbeccddaf9eae5d88ef077815f1c4": {
+      "workers": {
+        "app/(dashboard)/users/page": {
+          "moduleId": 22681,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "revokePermissionAction",
+      "filename": "frontend/src/features/users/actions.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,27 @@
+1:"$Sreact.fragment"
+2:I[47257,["/_next/static/chunks/3fntmmi971322.js"],"ClientPageRoot"]
+3:I[11175,["/_next/static/chunks/3fntmmi971322.js","/_next/static/chunks/3o1_zjbme8l6l.js","/_next/static/chunks/0wkc-2625l7kf.js"],"default"]
+6:I[97367,["/_next/static/chunks/3fntmmi971322.js"],"OutletBoundary"]
+7:"$Sreact.suspense"
+b:I[97367,["/_next/static/chunks/3fntmmi971322.js"],"ViewportBoundary"]
+c:I[97367,["/_next/static/chunks/3fntmmi971322.js"],"MetadataBoundary"]
+e:I[39756,["/_next/static/chunks/3fntmmi971322.js"],"default"]
+f:I[37457,["/_next/static/chunks/3fntmmi971322.js"],"default"]
+12:I[24549,["/_next/static/chunks/3fntmmi971322.js","/_next/static/chunks/2tzbwjo0b6c48.js","/_next/static/chunks/0wkc-2625l7kf.js"],"default"]
+13:I[22016,["/_next/static/chunks/3fntmmi971322.js","/_next/static/chunks/22i43cg4l4-dq.js"],""]
+:HL["/_next/static/chunks/2382wupku8l3p.css","style"]
+a:X
+11:X
+11:C
+0:{"buildId":"hD7GNFNQCLf4O4T_pmr4X","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/_next/static/chunks/3o1_zjbme8l6l.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/0wkc-2625l7kf.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":"$@9","staleTime":"$a","varyParams":null},{"rsc":["$","$1","h",{"children":[null,["$","$Lb",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$Lc",null,{"children":["$","$7",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"TechManage"}],["$","meta","1",{"name":"description","content":"ระบบจัดการครุภัณฑ์และงานซ่อมบำรุง"}]]}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"isPartial":"$@d","staleTime":"$a","varyParams":null},{"rsc":["$","$1","c",{"children":[null,["$","$Le",null,{"parallelRouterKey":"children","template":["$","$Lf",null,{}]}]]}],"isPartial":"$@10","staleTime":"$a","varyParams":"$11"},{"rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2382wupku8l3p.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/3fntmmi971322.js","async":true}]],["$","html",null,{"lang":"th","suppressHydrationWarning":true,"children":["$","body",null,{"className":"inter_b2991b2-module__9mH_6q__variable font-sans","children":["$","$Le",null,{"parallelRouterKey":"children","error":"$12","errorStyles":[],"errorScripts":[["$","script","script-0",{"src":"/_next/static/chunks/2tzbwjo0b6c48.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/0wkc-2625l7kf.js","async":true}]],"template":["$","$Lf",null,{}],"notFound":[["$","div",null,{"className":"flex min-h-screen flex-col items-center justify-center gap-4 text-center","children":[["$","div",null,{"className":"text-6xl font-bold text-gray-200","children":"404"}],["$","h2",null,{"className":"text-xl font-semibold text-gray-700","children":"ไม่พบหน้าที่ต้องการ"}],["$","p",null,{"className":"text-sm text-gray-500","children":"URL ที่คุณเข้ามาไม่มีอยู่ในระบบ"}],["$","button",null,{"className":"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2","asChild":true,"children":["$","$L13",null,{"href":"/dashboard","children":"กลับหน้าหลัก"}]}]]}],[]]}]}]}]]}],"isPartial":"$@14","staleTime":"$a","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@15","rootVaryParams":null,"needsRuntimeRequest":"$@16"}
+4:{}
+5:"$0:data:0:rsc:props:children:0:props:serverProvidedParams:params"
+8:null
+a:300
+16:true
+a:C
+15:0
+d:"$undefined"
+10:"$undefined"
+14:"$undefined"
+9:"$undefined"

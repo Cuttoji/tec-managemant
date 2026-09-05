@@ -1,0 +1,27 @@
+{
+  "node": {
+    "6088113be7cbc961b1f9c28ab94e26953e790a7ee0": {
+      "workers": {
+        "app/(dashboard)/import/page": {
+          "moduleId": 50541,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "importBrAdminCsvAction",
+      "filename": "frontend/src/features/import/actions.ts"
+    },
+    "604d579f7a97a3260814da8010e740073df79a92b8": {
+      "workers": {
+        "app/(dashboard)/import/page": {
+          "moduleId": 50541,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "getImportLogsAction",
+      "filename": "frontend/src/features/import/actions.ts"
+    }
+  },
+  "edge": {}
+}

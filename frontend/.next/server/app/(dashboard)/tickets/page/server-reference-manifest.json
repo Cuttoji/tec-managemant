@@ -1,0 +1,49 @@
+{
+  "node": {
+    "40912a416690c7ab34e8d8034005807c8166725985": {
+      "workers": {
+        "app/(dashboard)/tickets/page": {
+          "moduleId": 81441,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "createTicketAction",
+      "filename": "frontend/src/features/tickets/actions.ts"
+    },
+    "406f4af7672816e36c93920b9a8a14781a5e769e40": {
+      "workers": {
+        "app/(dashboard)/tickets/page": {
+          "moduleId": 81441,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "claimTicketAction",
+      "filename": "frontend/src/features/tickets/actions.ts"
+    },
+    "6020959e1be6bbdabe3792550115c5019d2caa3781": {
+      "workers": {
+        "app/(dashboard)/tickets/page": {
+          "moduleId": 81441,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "reviewTicketAction",
+      "filename": "frontend/src/features/tickets/actions.ts"
+    },
+    "6011cd553c747adc10ba17f4561a8a55497dbe4c8e": {
+      "workers": {
+        "app/(dashboard)/tickets/page": {
+          "moduleId": 81441,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "completeTicketAction",
+      "filename": "frontend/src/features/tickets/actions.ts"
+    }
+  },
+  "edge": {}
+}

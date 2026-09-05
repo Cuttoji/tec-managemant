@@ -1,16 +1,17 @@
 {
+  "/(dashboard)/assets/[id]/page": "app/(dashboard)/assets/[id]/page.js",
+  "/(dashboard)/assets/page": "app/(dashboard)/assets/page.js",
+  "/(dashboard)/audit-logs/page": "app/(dashboard)/audit-logs/page.js",
+  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(dashboard)/import/page": "app/(dashboard)/import/page.js",
+  "/(dashboard)/printer-summary/page": "app/(dashboard)/printer-summary/page.js",
+  "/(dashboard)/review/page": "app/(dashboard)/review/page.js",
+  "/(dashboard)/tickets/page": "app/(dashboard)/tickets/page.js",
+  "/(dashboard)/users/page": "app/(dashboard)/users/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/api/health/route": "app/api/health/route.js",
   "/login/page": "app/login/page.js",
-  "/page": "app/page.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/(dashboard)/printer-summary/page": "app/(dashboard)/printer-summary/page.js",
-  "/(dashboard)/assets/[id]/page": "app/(dashboard)/assets/[id]/page.js",
-  "/(dashboard)/import/page": "app/(dashboard)/import/page.js",
-  "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
-  "/(dashboard)/assets/page": "app/(dashboard)/assets/page.js",
-  "/(dashboard)/review/page": "app/(dashboard)/review/page.js",
-  "/(dashboard)/users/page": "app/(dashboard)/users/page.js",
-  "/(dashboard)/audit-logs/page": "app/(dashboard)/audit-logs/page.js",
-  "/(dashboard)/tickets/page": "app/(dashboard)/tickets/page.js"
+  "/page": "app/page.js"
 }

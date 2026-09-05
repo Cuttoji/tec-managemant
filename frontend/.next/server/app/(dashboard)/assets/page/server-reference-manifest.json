@@ -1,0 +1,16 @@
+{
+  "node": {
+    "4080bf539a2dcef98a4f9c2b3e1c5e8bca6bcadb38": {
+      "workers": {
+        "app/(dashboard)/assets/page": {
+          "moduleId": 47114,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "createAssetAction",
+      "filename": "frontend/src/features/assets/actions.ts"
+    }
+  },
+  "edge": {}
+}
