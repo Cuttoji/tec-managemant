@@ -45,7 +45,6 @@ export async function createUserAction(input: CreateUserInput) {
           permission,
           grantedBy: Number(session.user.id),
         })),
-        skipDuplicates: true,
       });
     }
 
