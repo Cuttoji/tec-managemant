@@ -25,9 +25,9 @@ export async function listAssets(filters: AssetFiltersInput) {
 
   if (q) {
     where.OR = [
-      { assetTag:     { contains: q, mode: 'insensitive' } },
-      { serialNumber: { contains: q, mode: 'insensitive' } },
-      { model:        { contains: q, mode: 'insensitive' } },
+      { assetTag:     { contains: q } },
+      { serialNumber: { contains: q } },
+      { model:        { contains: q } },
     ];
   }
   if (type)        where.type        = type;

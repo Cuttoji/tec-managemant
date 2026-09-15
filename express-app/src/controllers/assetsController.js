@@ -5,6 +5,21 @@ const ASSET_FIELDS = [
   'cpu', 'ramGb', 'storageType', 'storageGb', 'purchaseDate',
 ];
 
+exports.assetStats = async (req, res) => {
+  try {
+    const [total, needsReview, active, retired] = await Promise.all([
+      prisma.asset.count(),
+      prisma.asset.count({ where: { needsReview: true } }),
+      prisma.asset.count({ where: { isActive: true, needsReview: false } }),
+      prisma.asset.count({ where: { isActive: false } }),
+    ]);
+    return res.json({ total, needsReview, active, retired });
+  } catch (err) {
+    console.error('assetStats error', err);
+    return res.status(500).json({ error: 'Failed to get asset stats' });
+  }
+};
+
 exports.listAssets = async (req, res) => {
   try {
     const page = Math.max(1, Number(req.query.page) || 1);

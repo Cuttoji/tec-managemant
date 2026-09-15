@@ -3,32 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  // directUrl used by migrate commands (bypasses pooler)
-  // directUrl = env("DATABASE_DIRECT_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
-// ─── Enums ────────────────────────────────────────────────────────────────────
-
-enum Role {
-  ADMIN
-  TECHNICIAN
-}
-
-enum AssetType {
-  PRINTER
-  COMPUTER
-  SCANNER
-  OTHER
-}
-
-enum MaintenanceStatus {
-  OPEN
-  IN_PROGRESS
-  COMPLETED
-  REVIEWED
-}
+// ─── Enums (SQLite uses String — values enforced at app layer) ───────────────
+// Role: ADMIN | TECHNICIAN
+// AssetType: PRINTER | COMPUTER | SCANNER | OTHER
+// MaintenanceStatus: OPEN | IN_PROGRESS | COMPLETED | REVIEWED
 
 // ─── User & Auth ──────────────────────────────────────────────────────────────
 
@@ -37,10 +19,10 @@ model User {
   name         String
   email        String   @unique
   passwordHash String
-  role         Role     @default(TECHNICIAN)
+  role         String   @default("TECHNICIAN")
   primarySkill String?
   isActive     Boolean  @default(true)
-  lineUserId   String?  @unique   // LINE Messaging API — future use
+  lineUserId   String?  @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -85,7 +67,7 @@ model Asset {
   id           Int       @id @default(autoincrement())
   assetTag     String?   @unique
   serialNumber String?   @unique
-  type         AssetType
+  type         String    // PRINTER | COMPUTER | SCANNER | OTHER
   model        String?
   locationId   Int?
   location     Location? @relation(fields: [locationId], references: [id])
@@ -170,7 +152,7 @@ model MaintenanceLog {
   repairDetails String?
   brand         String?
   reviewNotes   String?
-  status        MaintenanceStatus @default(OPEN)
+  status        String            @default("OPEN") // OPEN | IN_PROGRESS | COMPLETED | REVIEWED
 
   // Loaner tracking
   usedLoaner      Boolean @default(false)
@@ -215,7 +197,7 @@ model ImportLog {
   id             Int      @id @default(autoincrement())
   filename       String
   filePath       String?
-  parsed         Json?
+  parsed         String?  // JSON stored as string for SQLite
   unmatchedCount Int      @default(0)
   createdBy      Int?
   createdByUser  User?    @relation(fields: [createdBy], references: [id])
@@ -229,8 +211,8 @@ model AuditLog {
   action     String   // e.g. "asset.update", "ticket.claim"
   targetType String   // "Asset" | "MaintenanceLog" | "User" | "Location"
   targetId   Int
-  before     Json?
-  after      Json?
+  before     String?  // JSON stored as string for SQLite
+  after      String?  // JSON stored as string for SQLite
   ip         String?
   userAgent  String?
   createdAt  DateTime @default(now())

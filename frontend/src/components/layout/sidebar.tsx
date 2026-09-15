@@ -18,10 +18,12 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { href: '/dashboard',        icon: <Monitor    className="h-4 w-4" />, label: 'Assets' },
+  { href: '/dashboard',        icon: <Monitor    className="h-4 w-4" />, label: 'Dashboard' },
+  { href: '/assets',           icon: <Monitor    className="h-4 w-4" />, label: 'Assets' },
   { href: '/tickets',          icon: <Wrench     className="h-4 w-4" />, label: 'Maintenance' },
   { href: '/printer-summary',  icon: <Printer    className="h-4 w-4" />, label: 'สรุปเครื่องพิมพ์' },
   { href: '/review',           icon: <CheckSquare className="h-4 w-4" />, label: 'Review',       adminOnly: true },
+  { href: '/locations',        icon: <Settings   className="h-4 w-4" />, label: 'Locations',     adminOnly: true },
   { href: '/users',            icon: <Users      className="h-4 w-4" />, label: 'Users',         adminOnly: true },
   { href: '/import',           icon: <Upload     className="h-4 w-4" />, label: 'Import',        adminOnly: true },
   { href: '/audit-logs',       icon: <ClipboardList className="h-4 w-4" />, label: 'Audit Logs', adminOnly: true },

@@ -4,7 +4,7 @@ const router  = express.Router();
 const {
   createMaintenance, listMaintenance, claimMaintenance,
   completeMaintenance, updateRepairDetails, reviewMaintenance,
-  addComponent, listComponents,
+  addComponent, listComponents, maintenanceStats,
 } = require('../controllers/maintenanceController');
 const { requireAuth, requireAdmin, requireTechOrAdmin, requirePermission } = require('../middleware/auth');
 const { validate }  = require('../middleware/validate');
@@ -17,7 +17,8 @@ const {
 } = require('../schemas');
 const prisma = require('../db');
 
-router.get('/',  requireAuth, listMaintenance);
+router.get('/',     requireAuth, listMaintenance);
+router.get('/stats', requireAuth, maintenanceStats);
 
 router.post('/',
   requireAdmin,

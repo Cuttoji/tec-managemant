@@ -38,7 +38,7 @@ export async function importBrAdminCsvAction(content: string, filename = 'upload
       let locationId: number | null = null;
       if (device.location) {
         const loc = await db.location.findFirst({
-          where: { name: { equals: device.location, mode: 'insensitive' } },
+          where: { name: { equals: device.location } },
         });
         locationId = loc?.id ?? null;
       }
@@ -90,7 +90,7 @@ export async function importBrAdminCsvAction(content: string, filename = 'upload
     await db.importLog.create({
       data: {
         filename,
-        parsed:         { devices: devices.length, created, updated },
+        parsed:         JSON.stringify({ devices: devices.length, created, updated }),
         unmatchedCount: unmatched,
         createdBy:      Number(session.user.id),
       },

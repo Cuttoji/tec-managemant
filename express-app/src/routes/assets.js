@@ -3,7 +3,7 @@ const express = require('express');
 const router  = express.Router();
 const {
   listAssets, getAsset, createAsset, updateAsset,
-  retireAsset, approveAsset, rejectAsset,
+  retireAsset, approveAsset, rejectAsset, assetStats,
 } = require('../controllers/assetsController');
 const { requireAuth, requireAdmin, requirePermission } = require('../middleware/auth');
 const { validate }  = require('../middleware/validate');
@@ -11,8 +11,9 @@ const { auditLog }  = require('../middleware/audit');
 const { createAssetSchema, updateAssetSchema } = require('../schemas');
 const prisma = require('../db');
 
-router.get('/',    requireAuth, listAssets);
-router.get('/:id', requireAuth, getAsset);
+router.get('/',       requireAuth, listAssets);
+router.get('/stats',  requireAuth, assetStats);
+router.get('/:id',    requireAuth, getAsset);
 
 router.post('/',
   requireAdmin,

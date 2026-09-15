@@ -9,6 +9,21 @@ const INCLUDE_FULL = {
   components: true,
 };
 
+exports.maintenanceStats = async (req, res) => {
+  try {
+    const [open, inProgress, completed, reviewed] = await Promise.all([
+      prisma.maintenanceLog.count({ where: { status: 'OPEN' } }),
+      prisma.maintenanceLog.count({ where: { status: 'IN_PROGRESS' } }),
+      prisma.maintenanceLog.count({ where: { status: 'COMPLETED' } }),
+      prisma.maintenanceLog.count({ where: { status: 'REVIEWED' } }),
+    ]);
+    return res.json({ open, inProgress, completed, reviewed });
+  } catch (err) {
+    console.error('maintenanceStats error', err);
+    return res.status(500).json({ error: 'Failed to get maintenance stats' });
+  }
+};
+
 exports.createMaintenance = async (req, res) => {
   try {
     const { assetId, issueDetails, notes } = req.body;
