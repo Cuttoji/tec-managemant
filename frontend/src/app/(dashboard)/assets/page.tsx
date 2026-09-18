@@ -32,16 +32,16 @@ export default async function AssetsPage({ searchParams }: PageProps) {
   ]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Assets</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Assets</h1>
           <p className="text-sm text-gray-500 mt-0.5">ครุภัณฑ์ทั้งหมดในระบบ</p>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
         <StatCard icon="🖥️" value={stats.total}       label="ทั้งหมด"    color="bg-blue-100" />
         <StatCard icon="✅" value={stats.active}      label="ใช้งานอยู่" color="bg-green-100" />
         <StatCard icon="⚠️" value={stats.needsReview} label="รอตรวจสอบ" color="bg-amber-100" />

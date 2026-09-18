@@ -120,37 +120,41 @@ export function TicketList({ items, total, page, limit, user }: Props) {
   return (
     <>
       {/* Tabs */}
-      <div className="flex gap-0 border-b border-border mb-4 overflow-x-auto">
-        {TABS.map((t: any) => (
-          <button
-            key={t.value}
-            onClick={() => updateParam('status', t.value)}
-            className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-              currentStatus === t.value
-                ? 'border-primary text-primary'
-                : 'border-transparent text-gray-500 hover:text-gray-800'
-            }`}
-          >
-            {t.label}
-            {currentStatus === t.value && total > 0 && (
-              <Badge variant="gray" className="ml-1.5">{total}</Badge>
-            )}
-          </button>
-        ))}
-        {isPending && <Spinner className="h-4 w-4 ml-3 self-center" />}
+      <div className="border-b border-border mb-4">
+        <div className="flex gap-0 overflow-x-auto pb-px scrollbar-hide">
+          {TABS.map((t: any) => (
+            <button
+              key={t.value}
+              onClick={() => updateParam('status', t.value)}
+              className={`px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                currentStatus === t.value
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-800'
+              }`}
+            >
+              {t.label}
+              {currentStatus === t.value && total > 0 && (
+                <Badge variant="gray" className="ml-1.5">{total}</Badge>
+              )}
+            </button>
+          ))}
+          {isPending && <Spinner className="h-4 w-4 ml-3 self-center" />}
+        </div>
 
-        <div className="ml-auto flex items-center gap-2 pb-1">
-          {/* Date filter */}
-          <Input type="date" className="h-7 text-xs w-36"
-            defaultValue={searchParams.get('dateFrom') ?? ''}
-            onChange={(e) => updateParam('dateFrom', e.target.value)} />
-          <span className="text-xs text-gray-400">—</span>
-          <Input type="date" className="h-7 text-xs w-36"
-            defaultValue={searchParams.get('dateTo') ?? ''}
-            onChange={(e) => updateParam('dateTo', e.target.value)} />
+        {/* Filters — stack vertically on mobile */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 py-2">
+          <div className="flex items-center gap-2">
+            <Input type="date" className="h-8 text-xs flex-1 sm:w-36"
+              defaultValue={searchParams.get('dateFrom') ?? ''}
+              onChange={(e) => updateParam('dateFrom', e.target.value)} />
+            <span className="text-xs text-gray-400">—</span>
+            <Input type="date" className="h-8 text-xs flex-1 sm:w-36"
+              defaultValue={searchParams.get('dateTo') ?? ''}
+              onChange={(e) => updateParam('dateTo', e.target.value)} />
+          </div>
 
           {user.role === 'ADMIN' && (
-            <Button size="sm" onClick={() => setShowCreate(true)}>+ เปิดงานซ่อม</Button>
+            <Button size="sm" onClick={() => setShowCreate(true)} className="w-full sm:w-auto sm:ml-auto">+ เปิดงานซ่อม</Button>
           )}
         </div>
       </div>
@@ -159,7 +163,7 @@ export function TicketList({ items, total, page, limit, user }: Props) {
       {items.length === 0 ? (
         <EmptyState icon="🔧" title="ไม่มีงานซ่อม" subtitle="ยังไม่มีงานในสถานะนี้" />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {items.map((m: any) => {
             const isMine      = Number(m.technicianId) === Number(user.id);
             const canClaim    = m.status === 'OPEN';
@@ -244,7 +248,7 @@ export function TicketList({ items, total, page, limit, user }: Props) {
                           onChange={(e) => setCompleteForm({ ...completeForm, repairDetails: e.target.value })}
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                           <Label>อาการเสีย</Label>
                           <Input placeholder="เช่น กระดาษติด" value={completeForm.symptom}

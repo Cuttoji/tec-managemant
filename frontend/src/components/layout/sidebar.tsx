@@ -75,7 +75,7 @@ export function Sidebar({ user, mobileOpen = false, onClose }: SidebarProps) {
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  'flex items-center gap-3 px-5 py-2.5 text-[13.5px] font-medium transition-colors',
+                  'flex items-center gap-3 px-5 py-3 min-h-[44px] text-[13.5px] font-medium transition-colors',
                   active
                     ? 'bg-primary text-white'
                     : 'text-gray-400 hover:bg-white/10 hover:text-white'
@@ -103,10 +103,10 @@ export function Sidebar({ user, mobileOpen = false, onClose }: SidebarProps) {
             <button
               onClick={() => signOut({ callbackUrl: '/login' })}
               title="ออกจากระบบ"
-              className="rounded-md p-1.5 text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
+              className="rounded-md p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
               aria-label="ออกจากระบบ"
             >
-              <LogOut className="h-4 w-4" />
+              <LogOut className="h-5 w-5" />
             </button>
           </div>
         </div>

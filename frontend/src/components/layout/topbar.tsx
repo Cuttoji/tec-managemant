@@ -11,10 +11,10 @@ export function Topbar({ onMenuClick }: TopbarProps) {
     <header className="sticky top-0 z-30 flex h-[var(--topbar-h)] items-center gap-3 bg-[hsl(var(--sidebar-bg))] px-4 lg:hidden">
       <button
         onClick={onMenuClick}
-        className="rounded-md p-1.5 text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
+        className="rounded-md p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-300 hover:bg-white/10 hover:text-white transition-colors"
         aria-label="เปิดเมนู"
       >
-        <Menu className="h-5 w-5" />
+        <Menu className="h-6 w-6" />
       </button>
       <span className="text-[15px] font-bold text-white">⚙️ TechManage</span>
     </header>

@@ -38,12 +38,26 @@
     @apply bg-gray-100 text-foreground font-sans antialiased text-sm;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
+  /* Responsive typography */
+  h1 { @apply text-xl sm:text-2xl; }
+  h2 { @apply text-lg sm:text-xl; }
+  h3 { @apply text-base sm:text-lg; }
 }
 
 /* ── Scrollbar ──────────────────────────────── */
 ::-webkit-scrollbar       { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { @apply bg-gray-300 rounded-full; }
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
 
 /* ── Page transition ────────────────────────── */
 @keyframes fadeIn {

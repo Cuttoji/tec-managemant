@@ -3,20 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-}
-
-enum Role {
-  ADMIN
-  TECHNICIAN
-}
-
-enum MaintenanceStatus {
-  OPEN
-  IN_PROGRESS
-  COMPLETED
-  REVIEWED
 }
 
 model User {
@@ -24,7 +12,7 @@ model User {
   name            String
   email           String            @unique
   passwordHash    String
-  role            Role              @default(TECHNICIAN)
+  role            String            @default("TECHNICIAN")
   primarySkill    String?
   isActive        Boolean           @default(true)
   permissions     UserPermission[]
@@ -107,7 +95,7 @@ model MaintenanceLog {
   loanerPageStart    Int?
   loanerPageEnd      Int?
   // ----------------------------
-  status             MaintenanceStatus @default(OPEN)
+  status             String            @default("OPEN")
   claimedAt          DateTime?
   completedAt        DateTime?
   reviewedBy         Int?
@@ -157,8 +145,8 @@ model AuditLog {
   action     String   // e.g. "asset.update", "maintenance.complete", "user.deactivate"
   targetType String   // "Asset" | "MaintenanceLog" | "User" | "Location"
   targetId   Int
-  before     Json?    // snapshot of fields before change
-  after      Json?    // snapshot of fields after change
+  before     String?  // JSON stored as string for SQLite
+  after      String?  // JSON stored as string for SQLite
   ip         String?
   userAgent  String?
   createdAt  DateTime @default(now())

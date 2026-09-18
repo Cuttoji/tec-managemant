@@ -35,7 +35,7 @@ export function DashboardLayout({ user, children }: DashboardLayoutProps) {
           <Topbar onMenuClick={() => setSidebarOpen((o) => !o)} />
 
           {/* Page content */}
-          <main className="flex-1 px-4 py-6 md:px-8 page-enter">
+          <main className="flex-1 px-3 py-4 sm:px-4 sm:py-6 md:px-8 page-enter">
             {children}
           </main>
         </div>

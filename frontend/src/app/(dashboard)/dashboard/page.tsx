@@ -37,10 +37,10 @@ export default async function DashboardPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-sm text-gray-500 mt-1">
           สวัสดี, <strong>{session?.user.name}</strong>
           <span className="ml-2 text-xs font-normal">({session?.user.role})</span>
@@ -49,8 +49,8 @@ export default async function DashboardPage() {
 
       {/* Asset stats */}
       <section>
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Assets</h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 sm:mb-3">Assets</h2>
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-4">
           <StatCard icon="🖥️" value={assetStats.total}       label="ทั้งหมด"    color="bg-blue-100" />
           <StatCard icon="✅" value={assetStats.active}      label="ใช้งานอยู่" color="bg-green-100" />
           <StatCard icon="⚠️" value={assetStats.needsReview} label="รอตรวจสอบ" color="bg-amber-100" />
@@ -60,8 +60,8 @@ export default async function DashboardPage() {
 
       {/* Ticket stats */}
       <section>
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Maintenance</h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2 sm:mb-3">Maintenance</h2>
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-4">
           <StatCard icon="📋" value={ticketStats.open}       label="รอรับงาน"   color="bg-amber-100" />
           <StatCard icon="🔧" value={ticketStats.inProgress} label="กำลังซ่อม" color="bg-blue-100" />
           <StatCard icon="🔍" value={ticketStats.completed}  label="รอ Review"  color="bg-purple-100" />
@@ -86,7 +86,7 @@ export default async function DashboardPage() {
                 <Link
                   key={t.id}
                   href={`/tickets?status=${t.status}`}
-                  className="flex items-center justify-between gap-3 px-5 py-3 hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 min-h-[44px] hover:bg-gray-50 transition-colors"
                 >
                   <div className="min-w-0 flex items-center gap-2 flex-wrap">
                     <Badge variant={STATUS_BADGE[t.status] ?? 'gray'}>

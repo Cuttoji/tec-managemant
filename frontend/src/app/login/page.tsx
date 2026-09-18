@@ -66,9 +66,9 @@ export default function LoginPage() {
       </div>
 
       {/* Right form panel */}
-      <div className="flex w-full lg:w-[460px] flex-shrink-0 items-center justify-center bg-white px-8 py-12">
+      <div className="flex w-full lg:w-[460px] flex-shrink-0 items-center justify-center bg-white px-6 py-8 sm:px-8 sm:py-12">
         <div className="w-full max-w-[340px]">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">เข้าสู่ระบบ</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">เข้าสู่ระบบ</h2>
           <p className="text-sm text-gray-500 mb-8">กรุณาใส่ข้อมูลผู้ใช้งานของคุณ</p>
 
           <form onSubmit={submit} className="space-y-4">

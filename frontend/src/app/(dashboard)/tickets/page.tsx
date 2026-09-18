@@ -21,10 +21,10 @@ export default async function TicketsPage({ searchParams }: PageProps) {
   const result = await listTickets(filters);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5">
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Maintenance</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Maintenance</h1>
           <p className="text-sm text-gray-500 mt-0.5">งานซ่อมบำรุงทั้งหมด</p>
         </div>
       </div>
