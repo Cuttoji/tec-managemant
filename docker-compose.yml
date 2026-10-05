@@ -1,6 +1,9 @@
 services:
+
+  # ── PostgreSQL ────────────────────────────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
+    container_name: techmanage-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: appuser
@@ -14,7 +17,56 @@ services:
       test: ["CMD-SHELL", "pg_isready -U appuser -d repair_tracking_dev"]
       interval: 5s
       timeout: 5s
+      retries: 10
+
+  # ── Express API ───────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: ./express-app
+      dockerfile: Dockerfile
+    container_name: techmanage-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: "postgresql://appuser:apppassword@postgres:5432/repair_tracking_dev"
+      JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
+      CORS_ORIGINS: "http://localhost:3002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
       retries: 5
+      start_period: 30s
+
+  # ── Next.js Frontend ──────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        AUTH_SECRET: "${AUTH_SECRET:-xa6gzkhoMzSI3vTHjBtyew+Dk+r/MKlDRp1BuFkZR6E=}"
+        NEXTAUTH_URL: "${NEXTAUTH_URL:-http://localhost:3002}"
+    container_name: techmanage-frontend
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: "postgresql://appuser:apppassword@postgres:5432/repair_tracking_dev"
+      AUTH_SECRET: "${AUTH_SECRET:-xa6gzkhoMzSI3vTHjBtyew+Dk+r/MKlDRp1BuFkZR6E=}"
+      NEXTAUTH_SECRET: "${AUTH_SECRET:-xa6gzkhoMzSI3vTHjBtyew+Dk+r/MKlDRp1BuFkZR6E=}"
+      NEXTAUTH_URL: "${NEXTAUTH_URL:-http://localhost:3002}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_healthy
 
 volumes:
   pgdata:

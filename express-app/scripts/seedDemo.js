@@ -11,7 +11,8 @@
  */
 
 // Load DATABASE_URL directly since dotenv may not be installed globally
-process.env.DATABASE_URL = process.env.DATABASE_URL || 'file:./dev.db';
+process.env.DATABASE_URL = process.env.DATABASE_URL ||
+  'postgresql://appuser:apppassword@localhost:5432/repair_tracking_dev';
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
@@ -72,6 +73,7 @@ async function main() {
         permission,
         grantedBy: admin.id,
       })),
+      skipDuplicates: true,
     });
   }
 

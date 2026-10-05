@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -211,8 +211,8 @@ model AuditLog {
   action     String   // e.g. "asset.update", "ticket.claim"
   targetType String   // "Asset" | "MaintenanceLog" | "User" | "Location"
   targetId   Int
-  before     String?  // JSON stored as string for SQLite
-  after      String?  // JSON stored as string for SQLite
+  before     Json?
+  after      Json?
   ip         String?
   userAgent  String?
   createdAt  DateTime @default(now())
