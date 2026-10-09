@@ -2,13 +2,18 @@
   "name": "tec-managemant",
   "private": true,
   "workspaces": [
-    "frontend",
-    "express-app"
+    "frontend"
   ],
+  "scripts": {
+    "dev":   "npm run dev   --workspace=frontend",
+    "build": "npm run build --workspace=frontend",
+    "start": "npm run start --workspace=frontend",
+    "seed":  "npm run seed  --workspace=frontend"
+  },
   "allowScripts": {
-    "prisma": true,
-    "@prisma/client": true,
+    "prisma":          true,
+    "@prisma/client":  true,
     "@prisma/engines": true,
-    "unrs-resolver": true
+    "unrs-resolver":   true
   }
 }

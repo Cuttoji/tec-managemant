@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
 export async function GET() {
@@ -6,34 +5,28 @@ export async function GET() {
   let dbStatus = 'ok';
   let dbLatencyMs: number | null = null;
 
-  // Avoid attempting a DB ping at build-time or when DATABASE_URL is not set
-  const dbUrl = process.env.DATABASE_URL ?? process.env.NEXT_PUBLIC_DATABASE_URL;
-  if (!dbUrl || /localhost|127\.0\.0\.1/.test(dbUrl)) {
+  try {
+    await db.$queryRaw`SELECT 1`;
+    dbLatencyMs = Date.now() - start;
+  } catch (err: any) {
     dbStatus = 'unreachable';
-  } else {
-    try {
-      await db.$queryRaw`SELECT 1`;
-      dbLatencyMs = Date.now() - start;
-    } catch (err) {
-      dbStatus = 'unreachable';
-      console.error('[health] DB ping failed:', (err as Error).message);
-    }
+    console.error('[health] DB ping failed:', err.message);
   }
 
-  const mem = process.memoryUsage();
   const status = dbStatus === 'ok' ? 'ok' : 'degraded';
+  const code   = dbStatus === 'ok' ? 200 : 503;
 
-  return NextResponse.json(
+  return Response.json(
     {
       status,
       uptime:    Math.floor(process.uptime()),
       timestamp: new Date().toISOString(),
       db:        { status: dbStatus, latencyMs: dbLatencyMs },
       memory: {
-        heapUsedMb:  Math.round(mem.heapUsed  / 1024 / 1024),
-        heapTotalMb: Math.round(mem.heapTotal / 1024 / 1024),
+        heapUsedMb:  Math.round(process.memoryUsage().heapUsed  / 1024 / 1024),
+        heapTotalMb: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
       },
     },
-    { status: dbStatus === 'ok' ? 200 : 503 }
+    { status: code },
   );
 }
