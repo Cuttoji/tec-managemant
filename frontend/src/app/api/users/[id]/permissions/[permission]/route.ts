@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
@@ -9,7 +8,7 @@ const DEFAULT_PERMISSIONS  = ['maintenance:claim', 'maintenance:complete', 'main
 const GRANTABLE_PERMISSIONS = ['asset:edit', 'location:manage'];
 
 // DELETE /api/users/[id]/permissions/[permission]
-export const DELETE = handle(async (req: NextRequest, ctx: Ctx) => {
+export const DELETE = handle(async (req: Request, ctx: Ctx) => {
   const { user: admin } = await requireApiAdmin(req);
   const { id, permission } = await ctx.params;
 

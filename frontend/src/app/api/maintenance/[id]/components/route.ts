@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, err } from '@/lib/apiResponse';
 import { requireApiAuth } from '@/lib/apiAuth';
@@ -7,7 +6,7 @@ import { addComponentSchema } from '@/lib/schemas';
 type Ctx = { params: Promise<{ id: string }> };
 
 // GET /api/maintenance/[id]/components
-export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx) => {
   await requireApiAuth(req);
   const { id } = await ctx.params;
 
@@ -19,7 +18,7 @@ export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
 });
 
 // POST /api/maintenance/[id]/components
-export const POST = handle(async (req: NextRequest, ctx: Ctx) => {
+export const POST = handle(async (req: Request, ctx: Ctx) => {
   await requireApiAuth(req);
   const { id } = await ctx.params;
 

@@ -1,11 +1,10 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, writeAudit } from '@/lib/apiResponse';
 import { requireApiAuth, requireApiPermission } from '@/lib/apiAuth';
 import { createLocationSchema } from '@/lib/schemas';
 
 // GET /api/locations
-export const GET = handle(async (req: NextRequest) => {
+export const GET = handle(async (req: Request) => {
   await requireApiAuth(req);
 
   const items = await db.location.findMany({
@@ -17,7 +16,7 @@ export const GET = handle(async (req: NextRequest) => {
 });
 
 // POST /api/locations
-export const POST = handle(async (req: NextRequest) => {
+export const POST = handle(async (req: Request) => {
   const { user } = await requireApiPermission('location:manage', req);
   const body = createLocationSchema.parse(await req.json());
 

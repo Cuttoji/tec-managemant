@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, err } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
@@ -6,7 +5,7 @@ import { requireApiAdmin } from '@/lib/apiAuth';
 type Ctx = { params: Promise<{ id: string }> };
 
 // GET /api/import/logs/[id]
-export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx) => {
   await requireApiAdmin(req);
   const { id } = await ctx.params;
 

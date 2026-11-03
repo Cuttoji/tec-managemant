@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
@@ -55,7 +54,7 @@ async function upsertDevices(devices: any[]) {
 }
 
 // POST /api/import/bradmin/csv  — raw CSV body
-export const POST = handle(async (req: NextRequest) => {
+export const POST = handle(async (req: Request) => {
   const { user } = await requireApiAdmin(req);
 
   const csv = await req.text();

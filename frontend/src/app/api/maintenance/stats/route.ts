@@ -1,10 +1,9 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok } from '@/lib/apiResponse';
 import { requireApiAuth } from '@/lib/apiAuth';
 
 // GET /api/maintenance/stats
-export const GET = handle(async (req: NextRequest) => {
+export const GET = handle(async (req: Request) => {
   await requireApiAuth(req);
 
   const [open, inProgress, completed, reviewed] = await Promise.all([

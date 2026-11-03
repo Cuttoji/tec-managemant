@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAuth, requireApiPermission } from '@/lib/apiAuth';
@@ -16,7 +15,7 @@ const INCLUDE_FULL = {
 } as const;
 
 // GET /api/maintenance/[id]
-export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx) => {
   await requireApiAuth(req);
   const { id } = await ctx.params;
 
@@ -29,7 +28,7 @@ export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
 });
 
 // PUT /api/maintenance/[id]/details — edit repair details
-export const PUT = handle(async (req: NextRequest, ctx: Ctx) => {
+export const PUT = handle(async (req: Request, ctx: Ctx) => {
   const { user } = await requireApiPermission('maintenance:edit', req);
   const { id } = await ctx.params;
 

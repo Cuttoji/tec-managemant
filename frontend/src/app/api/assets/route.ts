@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, writeAudit } from '@/lib/apiResponse';
 import { requireApiAuth, requireApiAdmin } from '@/lib/apiAuth';
@@ -10,10 +9,10 @@ const ASSET_FIELDS = [
 ] as const;
 
 // GET /api/assets — list with pagination + filters
-export const GET = handle(async (req: NextRequest) => {
+export const GET = handle(async (req: Request) => {
   await requireApiAuth(req);
 
-  const sp    = req.nextUrl.searchParams;
+  const sp    = new URL(req.url).searchParams;
   const page  = Math.max(1, Number(sp.get('page')  ?? 1));
   const limit = Math.min(100, Number(sp.get('limit') ?? 25));
   const skip  = (page - 1) * limit;
@@ -46,7 +45,7 @@ export const GET = handle(async (req: NextRequest) => {
 });
 
 // POST /api/assets — create asset (admin only)
-export const POST = handle(async (req: NextRequest) => {
+export const POST = handle(async (req: Request) => {
   const { user } = await requireApiAdmin(req);
   const body = createAssetSchema.parse(await req.json());
 

@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, writeAudit } from '@/lib/apiResponse';
 import { requireApiAuth, requireApiAdmin } from '@/lib/apiAuth';
@@ -14,10 +13,10 @@ const INCLUDE_FULL = {
 } as const;
 
 // GET /api/maintenance
-export const GET = handle(async (req: NextRequest) => {
+export const GET = handle(async (req: Request) => {
   await requireApiAuth(req);
 
-  const sp     = req.nextUrl.searchParams;
+  const sp     = new URL(req.url).searchParams;
   const page   = Math.max(1, Number(sp.get('page')   ?? 1));
   const limit  = Math.min(100, Number(sp.get('limit') ?? 25));
   const skip   = (page - 1) * limit;
@@ -43,7 +42,7 @@ export const GET = handle(async (req: NextRequest) => {
 });
 
 // POST /api/maintenance
-export const POST = handle(async (req: NextRequest) => {
+export const POST = handle(async (req: Request) => {
   const { user } = await requireApiAdmin(req);
   const body = createMaintenanceSchema.parse(await req.json());
 

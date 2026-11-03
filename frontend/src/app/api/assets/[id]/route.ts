@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAuth, requireApiAdmin, requireApiPermission } from '@/lib/apiAuth';
@@ -12,7 +11,7 @@ const ASSET_FIELDS = [
 ] as const;
 
 // GET /api/assets/[id]
-export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx) => {
   await requireApiAuth(req);
   const { id } = await ctx.params;
 
@@ -28,7 +27,7 @@ export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
 });
 
 // PUT /api/assets/[id]
-export const PUT = handle(async (req: NextRequest, ctx: Ctx) => {
+export const PUT = handle(async (req: Request, ctx: Ctx) => {
   const { user } = await requireApiPermission('asset:edit', req);
   const { id } = await ctx.params;
 

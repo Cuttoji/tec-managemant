@@ -1,7 +1,7 @@
 /**
  * apiResponse.ts — lightweight Next.js API response helpers
  */
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { ApiError } from './apiAuth';
 import { ZodError } from 'zod';
 
@@ -13,21 +13,20 @@ export function err(message: string, status = 500) {
   return NextResponse.json({ error: message }, { status });
 }
 
+type RouteContext = { params?: Promise<Record<string, string>> };
+type RouteHandler = (req: Request, ctx?: RouteContext) => Promise<NextResponse>;
+
 /**
  * Wrap an async handler and translate known error types automatically.
  * Usage:
  *   export const GET = handle(async (req) => { ... return ok(data); });
  */
-export function handle(
-  fn: (req: Request, ctx?: any) => Promise<NextResponse>,
-) {
-  return async (req: Request, ctx?: any): Promise<NextResponse> => {
+export function handle(fn: RouteHandler): RouteHandler {
+  return async (req: Request, ctx?: RouteContext): Promise<NextResponse> => {
     try {
       return await fn(req, ctx);
     } catch (e: any) {
-      if (e instanceof ApiError) {
-        return err(e.message, e.status);
-      }
+      if (e instanceof ApiError) return err(e.message, e.status);
       if (e instanceof ZodError) {
         const issues = e.issues.map((i) => ({
           field:   i.path.join('.') || 'root',
@@ -35,11 +34,8 @@ export function handle(
         }));
         return NextResponse.json({ error: 'Validation failed', issues }, { status: 400 });
       }
-      // Prisma unique constraint
       if (e?.code === 'P2002') return err('Already exists', 409);
-      // Prisma not found
       if (e?.code === 'P2025') return err('Not found', 404);
-
       console.error('[API Error]', e);
       return err(e?.message || 'Internal server error', 500);
     }

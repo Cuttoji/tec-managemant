@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
@@ -9,7 +8,7 @@ type Ctx = { params: Promise<{ id: string }> };
 const VALID_ROLES = ['ADMIN', 'TECHNICIAN'];
 
 // GET /api/users/[id]
-export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx) => {
   await requireApiAdmin(req);
   const { id } = await ctx.params;
 
@@ -27,7 +26,7 @@ export const GET = handle(async (req: NextRequest, ctx: Ctx) => {
 });
 
 // PUT /api/users/[id]
-export const PUT = handle(async (req: NextRequest, ctx: Ctx) => {
+export const PUT = handle(async (req: Request, ctx: Ctx) => {
   const { user: admin } = await requireApiAdmin(req);
   const { id } = await ctx.params;
 

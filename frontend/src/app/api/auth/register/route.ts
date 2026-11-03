@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { db } from '@/lib/db';
 import { handle, ok } from '@/lib/apiResponse';
@@ -6,7 +5,7 @@ import { registerSchema } from '@/lib/schemas';
 
 const DEFAULT_PERMISSIONS = ['maintenance:claim', 'maintenance:complete', 'maintenance:edit'];
 
-export const POST = handle(async (req: NextRequest) => {
+export const POST = handle(async (req: Request) => {
   const body = registerSchema.parse(await req.json());
   const { email, password, name, role = 'TECHNICIAN' } = body;
 

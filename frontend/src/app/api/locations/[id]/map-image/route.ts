@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { writeFile, unlink, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
@@ -15,7 +14,7 @@ async function ensureDir() {
 }
 
 // POST /api/locations/[id]/map-image
-export const POST = handle(async (req: NextRequest, ctx: Ctx) => {
+export const POST = handle(async (req: Request, ctx: Ctx) => {
   const { user } = await requireApiAdmin(req);
   const { id } = await ctx.params;
 
@@ -74,7 +73,7 @@ export const POST = handle(async (req: NextRequest, ctx: Ctx) => {
 });
 
 // DELETE /api/locations/[id]/map-image
-export const DELETE = handle(async (req: NextRequest, ctx: Ctx) => {
+export const DELETE = handle(async (req: Request, ctx: Ctx) => {
   const { user } = await requireApiAdmin(req);
   const { id } = await ctx.params;
 

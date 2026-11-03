@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { db } from '@/lib/db';
 import { handle, ok, writeAudit } from '@/lib/apiResponse';
@@ -8,7 +7,7 @@ import { createUserSchema } from '@/lib/schemas';
 const DEFAULT_PERMISSIONS = ['maintenance:claim', 'maintenance:complete', 'maintenance:edit'];
 
 // GET /api/users
-export const GET = handle(async (req: NextRequest) => {
+export const GET = handle(async (req: Request) => {
   await requireApiAdmin(req);
 
   const users = await db.user.findMany({
@@ -30,7 +29,7 @@ export const GET = handle(async (req: NextRequest) => {
 });
 
 // POST /api/users
-export const POST = handle(async (req: NextRequest) => {
+export const POST = handle(async (req: Request) => {
   const { user } = await requireApiAdmin(req);
   const body = createUserSchema.parse(await req.json());
 

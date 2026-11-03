@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin, requireApiPermission } from '@/lib/apiAuth';
@@ -7,7 +6,7 @@ import { updateLocationSchema } from '@/lib/schemas';
 type Ctx = { params: Promise<{ id: string }> };
 
 // PUT /api/locations/[id]
-export const PUT = handle(async (req: NextRequest, ctx: Ctx) => {
+export const PUT = handle(async (req: Request, ctx: Ctx) => {
   const { user } = await requireApiPermission('location:manage', req);
   const { id } = await ctx.params;
 
@@ -29,7 +28,7 @@ export const PUT = handle(async (req: NextRequest, ctx: Ctx) => {
 });
 
 // DELETE /api/locations/[id]
-export const DELETE = handle(async (req: NextRequest, ctx: Ctx) => {
+export const DELETE = handle(async (req: Request, ctx: Ctx) => {
   const { user } = await requireApiAdmin(req);
   const { id } = await ctx.params;
 

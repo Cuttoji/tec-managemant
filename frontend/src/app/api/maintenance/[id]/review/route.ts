@@ -1,4 +1,3 @@
-import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
@@ -16,7 +15,7 @@ const INCLUDE_FULL = {
 } as const;
 
 // POST /api/maintenance/[id]/review
-export const POST = handle(async (req: NextRequest, ctx: Ctx) => {
+export const POST = handle(async (req: Request, ctx: Ctx) => {
   const { user } = await requireApiAdmin(req);
   const { id } = await ctx.params;
 
