@@ -20,7 +20,17 @@ describe('Assets approve/reject', () => {
   const createdUserIds = [];
 
   beforeAll(async () => {
-    // create users and an asset in test db
+    // Clean up any previously seeded or leftover rows so the test is deterministic.
+    await prisma.asset.deleteMany({
+      where: {
+        OR: [
+          { assetTag: { startsWith: 'T-' } },
+          { assetTag: { startsWith: 'R-' } },
+          { model: { contains: 'OptiPlex', mode: 'insensitive' } },
+        ],
+      },
+    });
+
     adminUser = await prisma.user.create({ data: { name: 'Admin', email: 'admin@example.com', passwordHash: 'x', role: 'ADMIN' } });
     dispatcherUser = await prisma.user.create({ data: { name: 'Disp', email: 'disp@example.com', passwordHash: 'x', role: 'TECHNICIAN' } });
     createdUserIds.push(adminUser.id, dispatcherUser.id);
