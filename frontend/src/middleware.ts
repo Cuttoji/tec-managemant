@@ -7,9 +7,9 @@ export default auth((req: NextRequest & { auth: any }) => {
   const session = req.auth;
 
   // Public paths — always allow
-  if (pathname.startsWith('/login') || pathname.startsWith('/api/auth')) {
-    // Redirect authenticated users away from login
-    if (session?.user && pathname === '/login') {
+  if (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/api/auth')) {
+    // Redirect authenticated users away from login/register
+    if (session?.user && (pathname === '/login' || pathname === '/register')) {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
     return NextResponse.next();

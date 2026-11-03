@@ -64,9 +64,22 @@ async function main() {
     },
   });
 
+  const newTech = await prisma.user.upsert({
+    where:  { email: 'newtech@demo.com' },
+    update: {},
+    create: {
+      name:         'New Tech Demo',
+      email:        'newtech@demo.com',
+      passwordHash: PASS_HASH,
+      role:         'TECHNICIAN',
+      primarySkill: 'Maintenance',
+      isActive:     true,
+    },
+  });
+
   // Seed default permissions for technicians
   const DEFAULT_PERMS = ['maintenance:claim', 'maintenance:complete', 'maintenance:edit'];
-  for (const user of [tech1, tech2]) {
+  for (const user of [tech1, tech2, newTech]) {
     await prisma.userPermission.createMany({
       data: DEFAULT_PERMS.map(permission => ({
         userId:    user.id,
@@ -84,9 +97,10 @@ async function main() {
     create: { userId: tech1.id, permission: 'asset:edit', grantedBy: admin.id },
   });
 
-  console.log(`  ✓ admin@demo.com  (ADMIN)`);
-  console.log(`  ✓ tech@demo.com   (TECHNICIAN + asset:edit)`);
-  console.log(`  ✓ tech2@demo.com  (TECHNICIAN)\n`);
+  console.log(`  ✓ admin@demo.com    (ADMIN)`);
+  console.log(`  ✓ tech@demo.com     (TECHNICIAN + asset:edit)`);
+  console.log(`  ✓ tech2@demo.com    (TECHNICIAN)`);
+  console.log(`  ✓ newtech@demo.com  (TECHNICIAN)\n`);
 
   /* ── 2. Locations ───────────────────────────── */
   console.log('📍 Creating locations...');
@@ -296,9 +310,10 @@ async function main() {
   console.log('📊 Database summary:');
   Object.entries(counts).forEach(([k, v]) => console.log(`   ${k.padEnd(10)} ${v}`));
   console.log('\n🔑 Login credentials:');
-  console.log('   Admin      admin@demo.com   / demo1234');
-  console.log('   Tech 1     tech@demo.com    / demo1234  (+ asset:edit)');
-  console.log('   Tech 2     tech2@demo.com   / demo1234');
+  console.log('   Admin      admin@demo.com    / demo1234');
+  console.log('   Tech 1     tech@demo.com     / demo1234  (+ asset:edit)');
+  console.log('   Tech 2     tech2@demo.com    / demo1234');
+  console.log('   New Tech   newtech@demo.com  / demo1234');
   console.log('─'.repeat(40));
 }
 

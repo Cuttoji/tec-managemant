@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, FormEvent } from 'react';
 import { signIn }   from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -111,6 +112,13 @@ export default function LoginPage() {
               </button>
             ))}
           </div>
+
+          <p className="mt-6 text-center text-sm text-gray-600">
+            ยังไม่มีบัญชี?{' '}
+            <Link href="/register" className="font-semibold text-blue-600 hover:text-blue-700">
+              สมัครสมาชิก
+            </Link>
+          </p>
         </div>
       </div>
     </div>
