@@ -3,14 +3,14 @@ import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
 import { grantPermissionSchema } from '@/lib/schemas';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 const GRANTABLE_PERMISSIONS = ['asset:edit', 'location:manage'];
 
 // GET /api/users/[id]/permissions
-export const GET = handle(async (req: Request, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx | undefined) => {
   await requireApiAdmin(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const perms = await db.userPermission.findMany({
     where:   { userId: Number(id) },
@@ -22,9 +22,9 @@ export const GET = handle(async (req: Request, ctx: Ctx) => {
 });
 
 // POST /api/users/[id]/permissions — grant
-export const POST = handle(async (req: Request, ctx: Ctx) => {
+export const POST = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user: admin } = await requireApiAdmin(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const body = grantPermissionSchema.parse(await req.json());
 

@@ -3,14 +3,14 @@ import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
 import { updateUserSchema } from '@/lib/schemas';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 const VALID_ROLES = ['ADMIN', 'TECHNICIAN'];
 
 // GET /api/users/[id]
-export const GET = handle(async (req: Request, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx | undefined) => {
   await requireApiAdmin(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const user = await db.user.findUnique({
     where: { id: Number(id) },
@@ -26,9 +26,9 @@ export const GET = handle(async (req: Request, ctx: Ctx) => {
 });
 
 // PUT /api/users/[id]
-export const PUT = handle(async (req: Request, ctx: Ctx) => {
+export const PUT = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user: admin } = await requireApiAdmin(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const body = updateUserSchema.parse(await req.json());
 

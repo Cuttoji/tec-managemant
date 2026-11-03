@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'maps');
 
@@ -14,9 +14,9 @@ async function ensureDir() {
 }
 
 // POST /api/locations/[id]/map-image
-export const POST = handle(async (req: Request, ctx: Ctx) => {
+export const POST = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user } = await requireApiAdmin(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const body = await req.json();
   const { imageData } = body;
@@ -73,9 +73,9 @@ export const POST = handle(async (req: Request, ctx: Ctx) => {
 });
 
 // DELETE /api/locations/[id]/map-image
-export const DELETE = handle(async (req: Request, ctx: Ctx) => {
+export const DELETE = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user } = await requireApiAdmin(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const loc = await db.location.findUnique({
     where: { id: Number(id) }, select: { mapImageUrl: true },

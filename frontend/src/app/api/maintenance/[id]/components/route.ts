@@ -3,12 +3,12 @@ import { handle, ok, err } from '@/lib/apiResponse';
 import { requireApiAuth } from '@/lib/apiAuth';
 import { addComponentSchema } from '@/lib/schemas';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 // GET /api/maintenance/[id]/components
-export const GET = handle(async (req: Request, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx | undefined) => {
   await requireApiAuth(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const exists = await db.maintenanceLog.findUnique({ where: { id: Number(id) } });
   if (!exists) return err('Maintenance log not found', 404);
@@ -18,9 +18,9 @@ export const GET = handle(async (req: Request, ctx: Ctx) => {
 });
 
 // POST /api/maintenance/[id]/components
-export const POST = handle(async (req: Request, ctx: Ctx) => {
+export const POST = handle(async (req: Request, ctx: Ctx | undefined) => {
   await requireApiAuth(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const body = addComponentSchema.parse(await req.json());
 

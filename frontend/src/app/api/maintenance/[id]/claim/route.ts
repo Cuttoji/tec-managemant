@@ -2,7 +2,7 @@ import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAuth } from '@/lib/apiAuth';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 const INCLUDE_FULL = {
   asset:      { include: { location: true } },
@@ -14,9 +14,9 @@ const INCLUDE_FULL = {
 } as const;
 
 // POST /api/maintenance/[id]/claim
-export const POST = handle(async (req: Request, ctx: Ctx) => {
+export const POST = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user } = await requireApiAuth(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   if (!['ADMIN', 'TECHNICIAN'].includes(user.role)) {
     return err('Forbidden', 403);

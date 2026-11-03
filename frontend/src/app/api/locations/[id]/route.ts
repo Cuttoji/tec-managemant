@@ -3,12 +3,12 @@ import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin, requireApiPermission } from '@/lib/apiAuth';
 import { updateLocationSchema } from '@/lib/schemas';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 // PUT /api/locations/[id]
-export const PUT = handle(async (req: Request, ctx: Ctx) => {
+export const PUT = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user } = await requireApiPermission('location:manage', req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const body = updateLocationSchema.parse(await req.json());
 
@@ -28,9 +28,9 @@ export const PUT = handle(async (req: Request, ctx: Ctx) => {
 });
 
 // DELETE /api/locations/[id]
-export const DELETE = handle(async (req: Request, ctx: Ctx) => {
+export const DELETE = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user } = await requireApiAdmin(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const count = await db.asset.count({ where: { locationId: Number(id) } });
   if (count > 0) {

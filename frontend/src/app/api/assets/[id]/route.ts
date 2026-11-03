@@ -3,7 +3,7 @@ import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAuth, requireApiAdmin, requireApiPermission } from '@/lib/apiAuth';
 import { updateAssetSchema } from '@/lib/schemas';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 const ASSET_FIELDS = [
   'type', 'model', 'serialNumber', 'assetTag', 'locationId',
@@ -11,9 +11,9 @@ const ASSET_FIELDS = [
 ] as const;
 
 // GET /api/assets/[id]
-export const GET = handle(async (req: Request, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx | undefined) => {
   await requireApiAuth(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const asset = await db.asset.findUnique({
     where: { id: Number(id) },
@@ -27,9 +27,9 @@ export const GET = handle(async (req: Request, ctx: Ctx) => {
 });
 
 // PUT /api/assets/[id]
-export const PUT = handle(async (req: Request, ctx: Ctx) => {
+export const PUT = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user } = await requireApiPermission('asset:edit', req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const body = updateAssetSchema.parse(await req.json());
   const before = await db.asset.findUnique({ where: { id: Number(id) } });

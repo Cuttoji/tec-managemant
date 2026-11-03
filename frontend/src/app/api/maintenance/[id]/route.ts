@@ -3,7 +3,7 @@ import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAuth, requireApiPermission } from '@/lib/apiAuth';
 import { updateRepairDetailsSchema } from '@/lib/schemas';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 const INCLUDE_FULL = {
   asset:      { include: { location: true } },
@@ -15,9 +15,9 @@ const INCLUDE_FULL = {
 } as const;
 
 // GET /api/maintenance/[id]
-export const GET = handle(async (req: Request, ctx: Ctx) => {
+export const GET = handle(async (req: Request, ctx: Ctx | undefined) => {
   await requireApiAuth(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const m = await db.maintenanceLog.findUnique({
     where: { id: Number(id) },
@@ -28,9 +28,9 @@ export const GET = handle(async (req: Request, ctx: Ctx) => {
 });
 
 // PUT /api/maintenance/[id]/details — edit repair details
-export const PUT = handle(async (req: Request, ctx: Ctx) => {
+export const PUT = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user } = await requireApiPermission('maintenance:edit', req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const existing = await db.maintenanceLog.findUnique({ where: { id: Number(id) } });
   if (!existing) return err('Not found', 404);

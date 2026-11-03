@@ -2,15 +2,15 @@ import { db } from '@/lib/db';
 import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
 
-type Ctx = { params: Promise<{ id: string; permission: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 const DEFAULT_PERMISSIONS  = ['maintenance:claim', 'maintenance:complete', 'maintenance:edit'];
 const GRANTABLE_PERMISSIONS = ['asset:edit', 'location:manage'];
 
 // DELETE /api/users/[id]/permissions/[permission]
-export const DELETE = handle(async (req: Request, ctx: Ctx) => {
+export const DELETE = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user: admin } = await requireApiAdmin(req);
-  const { id, permission } = await ctx.params;
+  const { id, permission } = await (ctx?.params ?? Promise.resolve({ id: '', permission: '' }));
 
   if (DEFAULT_PERMISSIONS.includes(permission)) {
     return err('Default permissions cannot be revoked', 400);

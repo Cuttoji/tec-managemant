@@ -3,7 +3,7 @@ import { handle, ok, err, writeAudit } from '@/lib/apiResponse';
 import { requireApiAdmin } from '@/lib/apiAuth';
 import { reviewMaintenanceSchema } from '@/lib/schemas';
 
-type Ctx = { params: Promise<{ id: string }> };
+type Ctx = { params?: Promise<Record<string, string>> };
 
 const INCLUDE_FULL = {
   asset:      { include: { location: true } },
@@ -15,9 +15,9 @@ const INCLUDE_FULL = {
 } as const;
 
 // POST /api/maintenance/[id]/review
-export const POST = handle(async (req: Request, ctx: Ctx) => {
+export const POST = handle(async (req: Request, ctx: Ctx | undefined) => {
   const { user } = await requireApiAdmin(req);
-  const { id } = await ctx.params;
+  const { id } = await (ctx?.params ?? Promise.resolve({ id: '' }));
 
   const body = reviewMaintenanceSchema.parse(await req.json());
 
