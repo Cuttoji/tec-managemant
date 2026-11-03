@@ -43,9 +43,10 @@ app.use('/health', healthRouter);
 app.use('/import', express.text({ type: ['application/xml', 'text/xml', 'text/*'], limit: '1mb' }));
 app.use('/import', importRouter);
 app.use('/assets', assetsRouter);
-app.use('/auth',   authRouter);
-app.use('/users',  usersRouter);
-app.use('/locations',  locationsRouter);
+app.use('/auth', authRouter);
+app.use('/', authRouter);
+app.use('/users', usersRouter);
+app.use('/locations', locationsRouter);
 app.use('/maintenance', maintenanceRouter);
 
 app.get('/', (req, res) => res.json({ status: 'ok', message: 'Welcome to Express app' }));
