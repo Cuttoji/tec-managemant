@@ -18,3 +18,4 @@ frontend/.next
 # Logs and coverage
 npm-debug.log
 coverage/
+.neon
