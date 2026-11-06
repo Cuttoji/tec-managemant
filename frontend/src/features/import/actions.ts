@@ -7,7 +7,7 @@ import { assertPermission } from '@/lib/rbac';
 import { revalidateAssets } from '@/lib/cache';
 import { revalidateTag } from '@/lib/cache';
 import { importCsvSchema }  from './schema';
-import { parseBrAdminCsv }  from './bradmin-parser';
+import { parseBrAdminCsv }  from '@/lib/bradminCsvParser';
 
 export async function importBrAdminCsvAction(content: string, filename = 'upload.csv') {
   return safeAction(async () => {
@@ -16,7 +16,7 @@ export async function importBrAdminCsvAction(content: string, filename = 'upload
 
     const { content: csv } = importCsvSchema.parse({ content, filename });
 
-    const devices = parseBrAdminCsv(csv);
+    const { devices } = parseBrAdminCsv(csv);
     if (devices.length === 0) {
       throw new Error('ไม่พบข้อมูลอุปกรณ์ในไฟล์ กรุณาตรวจสอบรูปแบบ CSV');
     }

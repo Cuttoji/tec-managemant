@@ -7,7 +7,7 @@ const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
 const db = new PrismaClient({
-  datasources: { db: { url: 'file:./dev.db' } },
+  datasources: { db: { url: process.env.DATABASE_URL || 'mysql://appuser:apppassword@127.0.0.1:3307/tec_management' } },
 });
 
 async function main() {

@@ -1,6 +1,6 @@
 # Tec Manage
 
-A full-stack asset management and maintenance tracking application built with a Node.js/Express API, a Next.js frontend, and PostgreSQL. The project is organized as a multi-package workspace and can be run locally with Docker Compose or by starting each service manually.
+A full-stack asset management and maintenance tracking application built with Next.js (App Router) and Prisma on MySQL. The API is implemented as Next.js Route Handlers under `frontend/src/app/api`.
 
 ## Overview
 
@@ -14,28 +14,23 @@ Tec Manage helps manage:
 
 ## Tech Stack
 
-- Backend: Node.js, Express, Prisma, PostgreSQL
-- Frontend: Next.js, React, TypeScript, Tailwind CSS
-- Database: PostgreSQL 16
-- Containerization: Docker + Docker Compose
+- Web app + API: Next.js, React, TypeScript, Tailwind CSS
+- API routes: Next.js Route Handlers (`frontend/src/app/api`)
+- Database: MySQL (Prisma)
+- Auth: NextAuth
 
 ## Project Structure
 
 ```text
 .
-├── docker-compose.yml
 ├── package.json
-├── express-app/
-│   ├── src/
-│   ├── prisma/
-│   ├── tests/
-│   └── package.json
 ├── frontend/
 │   ├── src/
-│   ├── prisma/
-│   └── package.json
-├── mobile/
-│   └── Expo app scaffold
+│   │   ├── app/          # pages + API route handlers
+│   │   ├── features/
+│   │   ├── components/
+│   │   └── lib/
+│   └── prisma/
 └── README.md
 ```
 
@@ -43,42 +38,14 @@ Tec Manage helps manage:
 
 | Service | URL / Port | Purpose |
 | --- | --- | --- |
-| PostgreSQL | localhost:5432 | Main database |
-| Express API | http://localhost:3000 | REST API |
-| Next.js Frontend | http://localhost:3002 | Web app |
+| MySQL | localhost:3307 | Main database |
+| Next.js (web + API) | http://localhost:3002 | Web app and REST API |
 
 ## Prerequisites
 
 - Node.js 18+
 - npm
-- Docker Desktop or Docker Engine
-- Docker Compose
-
-## Quick Start with Docker
-
-From the project root:
-
-```bash
-docker compose up --build
-```
-
-This starts:
-
-- PostgreSQL on port 5432
-- API on port 3000
-- frontend on port 3002
-
-To stop the stack:
-
-```bash
-docker compose down
-```
-
-To completely reset the database volume:
-
-```bash
-docker compose down -v
-```
+- MySQL server
 
 ## Manual Local Development
 
@@ -88,17 +55,7 @@ docker compose down -v
 npm install
 ```
 
-### 2) Start the backend
-
-```bash
-cd express-app
-npm install
-npm run dev
-```
-
-The API runs on http://localhost:3000.
-
-### 3) Start the frontend
+### 2) Start the app
 
 ```bash
 cd frontend
@@ -106,36 +63,20 @@ npm install
 npm run dev
 ```
 
-The web app runs on http://localhost:3002.
+The web app and the REST API routes under `/api` both run on http://localhost:3002.
 
 ## Environment Variables
 
-The Docker setup configures these values automatically, but local development may require matching variables in your environment.
+Local development may require these variables in your environment.
 
-### API
+### frontend
 
-- `PORT=3000`
-- `DATABASE_URL=postgresql://appuser:apppassword@localhost:5432/repair_tracking_dev`
-- `JWT_SECRET`
-- `CORS_ORIGINS=http://localhost:3002`
-
-### Frontend
-
+- `DATABASE_URL=mysql://<user>:<password>@localhost:3307/<database>`
 - `NEXTAUTH_URL=http://localhost:3002`
 - `AUTH_SECRET`
 - `NEXTAUTH_SECRET`
 
 ## Common Commands
-
-### Backend
-
-```bash
-cd express-app
-npm run dev
-npm test
-npm run prisma:generate
-npm run prisma:migrate
-```
 
 ### Frontend
 
@@ -149,9 +90,9 @@ npm run type-check
 
 ## Notes
 
-- The root package defines a workspace setup for the backend and frontend.
-- Prisma schemas exist in both the backend and frontend package, and the app is set up to work with PostgreSQL.
-- The Express app includes import logic for Bradmin CSV/XML data and JWT-based auth middleware.
+- The root package defines an npm workspace for `frontend`.
+- Prisma schema and seed scripts live in `frontend/prisma`, and the app is set up to work with MySQL.
+- Bradmin CSV/XML import parsing and authentication are implemented inside the Next.js app (`frontend/src/features/import`, `frontend/src/lib/auth.ts`).
 
 ## License
 

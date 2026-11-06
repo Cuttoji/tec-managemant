@@ -48,7 +48,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={ctx}>
       {children}
       {/* Container */}
-      <div className="fixed bottom-5 right-5 z-[100] flex flex-col gap-2 pointer-events-none">
+      <div className="fixed bottom-4 left-4 right-4 z-[100] flex flex-col items-stretch gap-2 pointer-events-none sm:bottom-5 sm:left-auto sm:right-5 sm:items-end">
         {toasts.map((t: any) => (
           <ToastItem
             key={t.id}
@@ -73,7 +73,7 @@ function ToastItem({ toast, onDismiss }: { toast: ToastItem; onDismiss: () => vo
   return (
     <div
       className={cn(
-        'pointer-events-auto flex items-center gap-3 min-w-[280px] max-w-sm',
+        'pointer-events-auto flex w-full min-w-0 items-center gap-3 sm:w-auto sm:min-w-[280px] sm:max-w-sm',
         'rounded-lg border-l-4 px-4 py-3 shadow-lg',
         'animate-in slide-in-from-right-5 fade-in duration-200',
         styles[toast.type]

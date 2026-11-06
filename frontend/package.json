@@ -8,7 +8,7 @@
     "start":       "next start -p 3002",
     "lint":        "next lint",
     "type-check":  "tsc --noEmit",
-    "seed":        "node scripts/seedDemo.js",
+    "seed":        "node prisma/seed.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {

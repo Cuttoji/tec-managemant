@@ -159,8 +159,8 @@ export function PrinterSummaryClient({ data, initialFrom, initialTo }: Props) {
               <div className="flex items-end gap-0">
                 {/* Y-axis */}
                 <div className="flex flex-col justify-between h-24 mr-2 pb-5 text-right">
-                  {[maxVal, Math.round(maxVal / 2), 0].map((v) => (
-                    <div key={v} className="text-[10px] text-gray-400">{v}</div>
+                  {[maxVal, Math.round(maxVal / 2), 0].map((v, i) => (
+                    <div key={i} className="text-[10px] text-gray-400">{v}</div>
                   ))}
                 </div>
                 {/* Bars */}

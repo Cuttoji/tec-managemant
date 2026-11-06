@@ -3,6 +3,17 @@
 !/.github/workflows/**
 node_modules
 frontend/.next
+
+# Build artifacts
+*.tsbuildinfo
+frontend/tsconfig.tsbuildinfo
+
+# Runtime uploads (BRAdmin import files)
+frontend/imports/
+
+# Bundled local Node runtime
+frontend/.local-node/
+
 # Environment files
 .env
 .env.local
@@ -18,4 +29,5 @@ frontend/.next
 # Logs and coverage
 npm-debug.log
 coverage/
-.neon
+# Documentation
+HANDOFF.md

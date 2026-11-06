@@ -1,9 +1,38 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# กติกากลางของทีม agent
 
-# This is NOT the Next.js you know
+ทุก agent ต้องอ่านไฟล์นี้ก่อนเริ่มงานทุกครั้ง
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+## ลำดับการทำงาน
+1. Planner เขียน/อัปเดต SPEC.md
+2. Designer, Developer, Content Writer, Backend ทำพร้อมกันได้ (คนละไฟล์)
+3. SEO Specialist ตามหลังเมื่อ index.html และเนื้อหาครบ
+4. QA Reviewer ทำเป็นขั้นสุดท้าย
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+## กฎความเป็นเจ้าของไฟล์
+- แก้เฉพาะไฟล์ที่ตัวเองเป็นเจ้าของตาม SPEC.md
+- ถ้าต้องให้ agent อื่นแก้ ให้ระบุใน report ห้ามแก้เอง
+- ถ้าสองตัวต้องแก้ไฟล์เดียวกัน ให้หยุดและรายงานให้ Planner ตัดสิน
 
-<!-- END:nextjs-agent-rules -->
+## กฎความปลอดภัย
+- ห้ามอ่านค่า หรือพิมพ์ค่าในไฟล์ .env ลงแชต รายงาน หรือ log
+- ห้ามแก้ .env ใช้ .env.example สำหรับตัวแปรใหม่
+- ห้ามลบไฟล์หรือโฟลเดอร์ ถ้าไม่ได้รับคำสั่งชัดเจนจากผู้ใช้
+- ห้ามติดตั้งแพ็กเกจใหม่โดยไม่บอกเหตุผลใน report
+
+## ข้อกำหนดโค้ด
+- ถ้า SPEC.md ไม่ระบุอย่างอื่น ใช้ HTML/CSS/JavaScript ล้วน ไม่ใช้ CDN
+- ข้อความภาษาไทยทั้งหมดเก็บใน content.js ห้าม hardcode ใน JS
+- ฟอนต์ใช้ฟอนต์ระบบ ห้ามโหลดจากอินเทอร์เน็ต
+
+## Definition of Done
+งานถือว่าเสร็จเมื่อ:
+- [ ] ไม่มี error ใน console และ node --check ผ่าน
+- [ ] ใช้งานได้ที่ความกว้าง 360px โดยหน้าไม่มี horizontal scroll
+- [ ] ทำงานได้ทั้งธีมสว่างและมืด
+- [ ] คอนทราสต์ข้อความหลักผ่าน WCAG AA
+- [ ] id/class/key ตรงกับ SPEC.md ครบ
+- [ ] ใน report ระบุชัดว่าอะไรทดสอบแล้ว และอะไรยังไม่ได้ทดสอบ
+
+## รูปแบบ report
+ไม่เกิน 5-6 บรรทัด: ทำอะไรไป / ทดสอบอะไร / ต้องให้ใครทำต่อ
+ห้ามอ้างว่าทดสอบแล้วถ้าไม่ได้ทำจริง
