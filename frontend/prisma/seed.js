@@ -6,9 +6,13 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
-const db = new PrismaClient({
-  datasources: { db: { url: process.env.DATABASE_URL || 'mysql://appuser:apppassword@127.0.0.1:3307/tec_management' } },
-});
+if (!process.env.DATABASE_URL) {
+  console.error('❌ DATABASE_URL is not set. Export it before running the seed,');
+  console.error('   e.g. $env:DATABASE_URL="mysql://user:password@host:port/database"');
+  process.exit(1);
+}
+
+const db = new PrismaClient();
 
 async function main() {
   console.log('🌱 Seeding database...');
